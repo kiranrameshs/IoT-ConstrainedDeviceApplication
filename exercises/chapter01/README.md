@@ -2,48 +2,34 @@
 
 ## Lab Module 01
 
-Be sure to implement all the PIOT-CDA-* issues (requirements) listed at [PIOT-INF-01-001 - Chapter 01](https://github.com/orgs/programming-the-iot/projects/1#column-9974937).
 
 ### Description
 
 NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
 
 What does your implementation do? 
+As part of first assignment, the task was to read Chapter 1 of Programming the Internet of Things, then setup the development environment for the CDA i.e. the Python components. 
+First step was to initialise git in the respective folder and clone the the CDA repository. The virtual environment was set and activated in the cloned repository. The dependencies were installed in the virtual env using pip. Then import the project from the folder on to Eclipse IDE. Set the PYTHONPATH and the env path using Pydev. Run the ConstrainedDeviceApp.py from programmingtheiot.cda.app folder
+CDA starts successfully as seen from the log prints from the console
 
 How does your implementation work?
+When the ConstrainedDeviceApp.py from programmingtheiot.cda.app folder is run, this gets an instance of the ConfigUtil.py which loads the configurations from DEFAULT_CONFIG_FILE_NAME (PiotConfig.props in this case). The CDA starts successfully as seen from the log prints in the console.
+
 
 ### Code Repository and Branch
-
-NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
-
-URL: 
+URL: https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/tree/chapter01
 
 ### UML Design Diagram(s)
 
-NOTE: Include one or more UML designs representing your solution. It's expected each
-diagram you provide will look similar to, but not the same as, its counterpart in the
-book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
+![CDA](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter01/uml/lab1_CDA.png?raw=true)
 
 
 ### Unit Tests Executed
-
-NOTE: TA's will execute your unit tests. You only need to list each test case below
-(e.g. ConfigUtilTest, DataUtilTest, etc). Be sure to include all previous tests, too,
-since you need to ensure you haven't introduced regressions.
-
-- 
-- 
-- 
+ConfigUtilTest (8/8)
 
 ### Integration Tests Executed
 
-NOTE: TA's will execute most of your integration tests using their own environment, with
-some exceptions (such as your cloud connectivity tests). In such cases, they'll review
-your code to ensure it's correct. As for the tests you execute, you only need to list each
-test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
-
-- 
-- 
-- 
+ConstrainedDeviceAppTest
+SystemPerformanceManagerTest
 
 EOF.

@@ -9,7 +9,7 @@
 # provided within in order to meet the needs of your specific
 # Programming the Internet of Things project.
 # 
-
+#main app
 import logging
 
 from time import sleep
