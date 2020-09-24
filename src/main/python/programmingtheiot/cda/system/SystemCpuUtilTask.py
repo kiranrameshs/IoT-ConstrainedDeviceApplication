@@ -19,8 +19,17 @@ class SystemCpuUtilTask(BaseSystemUtilTask):
 	"""
 
 	def __init__(self):
+		super(SystemCpuUtilTask, self).__init__()
+		#Assign the imported psutil library
+		self.perfMgr = psutil
 		pass
 	
 	def _getSystemUtil(self) -> float:
-		pass
+		return psutil.cpu_percent()
+	
+	def _getTelemetry(self) -> float:
+		#Call CPU Util Percent from Perf Manager
+		cpuUtilPct = self.perfMgr.cpu_percent()
+		logging.info("CPU Utilization Data collected, CPU Utilization is "+str(cpuUtilPct))
+		#pass
 		
