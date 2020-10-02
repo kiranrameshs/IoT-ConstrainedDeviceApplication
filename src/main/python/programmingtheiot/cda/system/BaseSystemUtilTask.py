@@ -8,7 +8,7 @@
 #
 
 from programmingtheiot.data.SensorData import SensorData
-
+import logging
 class BaseSystemUtilTask():
 	"""
 	Shell representation of class for student implementation.
@@ -30,7 +30,9 @@ class BaseSystemUtilTask():
 		pass
 		
 	def getTelemetryValue(self) -> float:
-		pass
+		val = self._getSystemUtil()
+		logging.info(self.__class__.__name__+" Value is "+str(val))
+		return val
 	
 	def _getSystemUtil(self) -> float:
 		"""
