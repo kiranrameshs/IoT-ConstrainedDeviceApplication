@@ -49,7 +49,8 @@ class IDataMessageListener():
 		@param data The SensorData message received.
 		@return bool True on success; False otherwise.
 		"""
-		pass
+# 		pass
+		return True;
 	
 	def handleSystemPerformanceMessage(self, data: SystemPerformanceData) -> bool:
 		"""

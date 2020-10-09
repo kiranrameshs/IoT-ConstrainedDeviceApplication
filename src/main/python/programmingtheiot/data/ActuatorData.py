@@ -28,32 +28,39 @@ class ActuatorData(BaseIotData):
 
 	def __init__(self, actuatorType = DEFAULT_ACTUATOR_TYPE, d = None):
 		super(ActuatorData, self).__init__(d = d)
-		pass
+		self.actuatorType  = actuatorType;
+		self.command = self.DEFAULT_COMMAND;
+		self.value = 0;
+		self.stateData = None;
+		
 	
 	def getCommand(self) -> int:
-		pass
+		return self.command;
 	
 	def getStateData(self) -> str:
-		pass
+		return self.stateData;
 	
 	def getValue(self) -> float:
-		pass
+		return self.value
 	
 	def isResponseFlagEnabled(self) -> bool:
 		return False
 	
 	def setCommand(self, command: int):
-		pass
+		self.command = command
 	
 	def setAsResponse(self):
 		pass
 		
 	def setStateData(self, stateData: str):
-		pass
+		self.stateData = stateData;
 	
 	def setValue(self, val: float):
-		pass
+		self.value = val;
 		
 	def _handleUpdateData(self, data):
-		pass
+		self.command = data.getCommand();
+		self.value = data.getValue();
+		self.stateData = data.getStateData();
+		
 		

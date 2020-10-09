@@ -17,22 +17,37 @@ class BaseActuatorSimTask():
 	Shell representation of class for student implementation.
 	
 	"""
-
+	
+	
 	def __init__(self, actuatorType: int = ActuatorData.DEFAULT_ACTUATOR_TYPE, simpleName: str = "Actuator"):
-		pass
+		self.actuatorType = actuatorType;
+		self.simpleName = simpleName;
+		self.actuatorData = ActuatorData();
 		
 	def activateActuator(self, val: float) -> bool:
-		pass
+		logging.info("ON command sent to actuator "+str(val))
+		self.actuatorData.setCommand(ActuatorData.COMMAND_ON);
 		
 	def deactivateActuator(self) -> bool:
-		pass
+		logging.info("OFF command sent to actuator ")
+		self.actuatorData.setCommand(ActuatorData.COMMAND_OFF);
 		
 	def getLatestActuatorResponse(self) -> ActuatorData:
-		pass
+		return self.actuatorData;
 	
 	def getSimpleName(self) -> str:
-		pass
+		return self.simpleName;
 	
 	def updateActuator(self, data: ActuatorData) -> bool:
-		pass
+		if(data):
+			if(data.getCommand() == 1):
+				self.activateActuator(data.getValue())
+			elif(data.getCommand() == 0):
+				self.deactivateActuator()
+			self.actuatorData = data;
+			self.actuatorData.setStatusCode(data.getStatusCode());
+			self.actuatorData.setAsResponse();
+			return True
+		else:
+			return False;
 		

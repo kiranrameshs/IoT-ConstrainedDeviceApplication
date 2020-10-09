@@ -10,7 +10,8 @@
 import logging
 
 from programmingtheiot.cda.sim.BaseSensorSimTask import BaseSensorSimTask
-from programmingtheiot.cda.sim.SensorDataGenerator import SensorDataGenerator
+from programmingtheiot.cda.sim.SensorDataGenerator import SensorDataGenerator,\
+	SensorDataSet
 
 from programmingtheiot.data.SensorData import SensorData
 
@@ -19,13 +20,14 @@ class TemperatureSensorSimTask(BaseSensorSimTask):
 	Shell representation of class for student implementation.
 	
 	"""
+	
 
-	def __init__(self):
-		pass
+	def __init__(self, dataSet: SensorDataSet=None):
+		super(TemperatureSensorSimTask, self).__init__(SensorData.TEMP_SENSOR_TYPE, dataSet = dataSet, minVal = SensorDataGenerator.LOW_NORMAL_INDOOR_TEMP, maxVal = SensorDataGenerator.HI_NORMAL_INDOOR_TEMP)
 	
 	def generateTelemetry(self) -> SensorData:
-		pass
+		return super(TemperatureSensorSimTask, self).generateTelemetry()
 	
 	def getTelemetryValue(self) -> float:
-		pass
+		return super(TemperatureSensorSimTask, self).getTelemetryValue()
 	

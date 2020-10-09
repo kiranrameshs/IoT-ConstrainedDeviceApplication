@@ -12,6 +12,8 @@ import logging
 from programmingtheiot.common.IDataMessageListener import IDataMessageListener
 
 from programmingtheiot.data.ActuatorData import ActuatorData
+from programmingtheiot.cda.sim.HumidifierActuatorSimTask import HumidifierActuatorSimTask
+from programmingtheiot.cda.sim.HvacActuatorSimTask import HvacActuatorSimTask
 
 class ActuatorAdapterManager(object):
 	"""
@@ -20,10 +22,34 @@ class ActuatorAdapterManager(object):
 	"""
 	
 	def __init__(self, useEmulator: bool = False):
-		pass
+		self.dataMessageListener = None;
+		self.useEmulator = useEmulator;
+		if(self.useEmulator):
+			logging.info("Using Emulators")
+		else:
+			logging.info("Using Simulators")
+			#initialize the actuators
+			self.humidifierActautor = HumidifierActuatorSimTask()
+			self.hvacActuator = HvacActuatorSimTask()
 
 	def sendActuatorCommand(self, data: ActuatorData) -> bool:
-		pass
-	
+		if(self.useEmulator != True):
+			if(data.actuatorType == 1):
+				logging.info("Simulating HVAC Actuator "+str(data.getCommand())+" HVAC VALUE -> "+str(data.getValue()))
+				self.hvacActuator.updateActuator(data);
+				return True;
+			elif(data.actuatorType == 2):
+				logging.info("Simulating HUMIDIFIER Actuator "+str(data.getCommand())+" HUMIDIFIER VALUE -> "+str(data.getValue()))
+				self.humidifierActautor.updateActuator(data);	
+				return True
+			else:
+				False
+		else:
+			pass;
+				
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
-		pass
+		if(self.dataMessageListener== None):
+			self.dataMessageListener = listener;
+			return True;
+		else:
+			return False;

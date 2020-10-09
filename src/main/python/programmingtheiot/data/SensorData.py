@@ -25,21 +25,24 @@ class SensorData(BaseIotData):
 		
 	def __init__(self, sensorType = DEFAULT_SENSOR_TYPE, d = None):
 		super(SensorData, self).__init__(d = d)
+		self.sensorType = sensorType;
+		self.value = self.DEFAULT_VAL;
 		pass
 	
 	def getSensorType(self) -> int:
 		"""
 		Returns the sensor type to the caller.
-		
 		@return int
 		"""
 		return self.sensorType
 	
 	def getValue(self) -> float:
-		pass
+		return self.value;
+		
 	
 	def setValue(self, newVal: float):
-		pass
+		self.value = newVal;
 		
 	def _handleUpdateData(self, data):
-		pass
+		self.value = data.getValue();
+		self.sensorType = data.getSensorType();

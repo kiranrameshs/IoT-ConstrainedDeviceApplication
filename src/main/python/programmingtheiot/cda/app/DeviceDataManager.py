@@ -18,10 +18,13 @@ from programmingtheiot.cda.system.SystemPerformanceManager import SystemPerforma
 
 from programmingtheiot.common.IDataMessageListener import IDataMessageListener
 from programmingtheiot.common.ResourceNameEnum import ResourceNameEnum
+from programmingtheiot.common import ConfigConst
 
 from programmingtheiot.data.ActuatorData import ActuatorData
 from programmingtheiot.data.SensorData import SensorData
 from programmingtheiot.data.SystemPerformanceData import SystemPerformanceData
+from programmingtheiot.common.ConfigUtil import ConfigUtil
+from programmingtheiot.data.DataUtil import DataUtil
 
 class DeviceDataManager(IDataMessageListener):
 	"""
@@ -30,25 +33,50 @@ class DeviceDataManager(IDataMessageListener):
 	"""
 	
 	def __init__(self, enableMqtt: bool = True, enableCoap: bool = False):
-		pass
+		self.systemPerformanceManager = SystemPerformanceManager();
+		self.systemPerformanceManager.setDataMessageListener(self);
+		self.configUtil = ConfigUtil()	
+		self.sensorAdapterManager = SensorAdapterManager();
+		self.sensorAdapterManager.setDataMessageListener(self);
+		self.actuatorAdapterManager = ActuatorAdapterManager();
+		self.actuatorAdapterManager.setDataMessageListener(self);
+		self.enableHandleTempChangeOnDevice = self.configUtil.getBoolean(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.ENABLE_HANDLE_TEMP_CHANGE_ON_DEVICE_KEY)
+		self.triggerHvacTempFloor = self.configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_TEMP_FLOOR_KEY);
+		self.triggerHvacTempCeiling = self.configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_TEMP_CEILING_KEY);
 			
 	def handleActuatorCommandResponse(self, data: ActuatorData) -> bool:
-		pass
+		logging.info("Handle Actuator Command Response");
+		return True;
 	
 	def handleIncomingMessage(self, resourceEnum: ResourceNameEnum, msg: str) -> bool:
-		pass
+		logging.info("Handle Incoming Message");
+		actuatorDataInstance = DataUtil.jsonToActuatorData(msg);
+		self._handleIncomingDataAnalysis(msg);
+		return True;
 
 	def handleSensorMessage(self, data: SensorData) -> bool:
-		pass
+		logging.info("Handle Sensor Message");
+		self.toJSON = DataUtil.sensorDataToJson(data);
+		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE,self.toJSON)
+		self._handleSensorDataAnalysis(data);
+		return True;
 		
 	def handleSystemPerformanceMessage(self, data: SystemPerformanceData) -> bool:
-		pass
+		logging.info("Handle System Performance Message");
+		self.toJSON = DataUtil.sensorDataToJson(data);
+		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE,self.toJSON)
+		self._handleSensorDataAnalysis(data);
+		return True;
 	
 	def startManager(self):
-		pass
+		logging.info("Start Manager "+str(self.startManager.__name__))
+		self.systemPerformanceManager.startManager();
+		self.sensorAdapterManager.startManager();
 		
 	def stopManager(self):
-		pass
+		logging.info("Stop Manager "+str(self.stopManager.__name__))
+		self.systemPerformanceManager.stopManager();
+		self.sensorAdapterManager.stopManager();
 
 	def _handleIncomingDataAnalysis(self, msg: str):
 		"""
@@ -58,7 +86,9 @@ class DeviceDataManager(IDataMessageListener):
 		2) Convert msg: Use DataUtil to convert if appropriate.
 		3) Act on msg: Determine what - if any - action is required, and execute.
 		"""
-		pass
+		logging.info("Handle Incoming DataAnalysis "+str(msg))
+		actuatorData = DataUtil.jsonToActuatorData(msg)
+		self.actuatorAdapterManager.sendActuatorCommand(actuatorData)
 		
 	def _handleSensorDataAnalysis(self, data: SensorData):
 		"""
@@ -67,7 +97,12 @@ class DeviceDataManager(IDataMessageListener):
 		1) Check config: Is there a rule or flag that requires immediate processing of data?
 		2) Act on data: If # 1 is true, determine what - if any - action is required, and execute.
 		"""
-		pass
+		logging.info("Handle Sensor Data Analysis "+str(data));
+		if(self.enableHandleTempChangeOnDevice == True):
+			actuatorData = ActuatorData(ActuatorData.HVAC_ACTUATOR_TYPE);
+			actuatorData.getValue();
+			actuatorData.setCommand(ActuatorData.COMMAND_ON);
+			self.actuatorAdapterManager.sendActuatorCommand(actuatorData);
 		
 	def _handleUpstreamTransmission(self, resourceName: ResourceNameEnum, msg: str):
 		"""
@@ -76,4 +111,4 @@ class DeviceDataManager(IDataMessageListener):
 		1) Check connection: Is there a client connection configured (and valid) to a remote MQTT or CoAP server?
 		2) Act on msg: If # 1 is true, send message upstream using one (or both) client connections.
 		"""
-		pass
+		logging.info("Handle Upstream Transmission "+str(msg));
