@@ -127,10 +127,10 @@ class BaseIotData(object):
 		@return The string representing this instance.
 		"""
 		customStr = \
-			str('name='	+ self.name + \
-			',timeStamp=' + self.timeStamp + \
-			',hasError=' + self.hasError + \
-			',statusCode=' + str(self.statusCode))
+            str('name='    + self.name + \
+            ',timeStamp=' + self.timeStamp + \
+            ',hasError=' + str(self.hasError) + \
+            ',statusCode=' + str(self.statusCode))
 					
 		return customStr
 	

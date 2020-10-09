@@ -33,7 +33,7 @@ class ConstrainedDeviceApp():
 		logging.info("Initializing CDA...")
 		self.devDataManager = DeviceDataManager()
 		# instance of SystemPerformanceManager		
-		self.sysPerfManager = SystemPerformanceManager()
+		#self.sysPerfManager = SystemPerformanceManager()
 
 	def startApp(self):
 		"""
