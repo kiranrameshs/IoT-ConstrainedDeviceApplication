@@ -11,7 +11,6 @@ import logging
 import random
 
 from programmingtheiot.data.ActuatorData import ActuatorData
-#from builtins import True
 
 class BaseActuatorSimTask():
 	"""

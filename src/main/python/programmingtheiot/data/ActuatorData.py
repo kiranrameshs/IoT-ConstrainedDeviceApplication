@@ -27,7 +27,6 @@ class ActuatorData(BaseIotData):
 	LED_DISPLAY_ACTUATOR_TYPE = 100
 
 	def __init__(self, actuatorType = DEFAULT_ACTUATOR_TYPE, d = None):
-		#initialize class scope variables of actuator based on input
 		super(ActuatorData, self).__init__(d = d)
 		self.actuatorType  = actuatorType;
 		self.command = self.DEFAULT_COMMAND;
@@ -60,7 +59,6 @@ class ActuatorData(BaseIotData):
 		self.value = val;
 		
 	def _handleUpdateData(self, data):
-		#Update class variables from data
 		self.command = data.getCommand();
 		self.value = data.getValue();
 		self.stateData = data.getStateData();

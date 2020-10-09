@@ -24,7 +24,6 @@ class ActuatorAdapterManager(object):
 	def __init__(self, useEmulator: bool = False):
 		self.dataMessageListener = None;
 		self.useEmulator = useEmulator;
-		
 		if(self.useEmulator):
 			logging.info("Using Emulators")
 		else:
@@ -34,7 +33,6 @@ class ActuatorAdapterManager(object):
 			self.hvacActuator = HvacActuatorSimTask()
 
 	def sendActuatorCommand(self, data: ActuatorData) -> bool:
-		
 		if(self.useEmulator != True):
 			if(data.actuatorType == 1):
 				logging.info("Simulating HVAC Actuator "+str(data.getCommand())+" HVAC VALUE -> "+str(data.getValue()))

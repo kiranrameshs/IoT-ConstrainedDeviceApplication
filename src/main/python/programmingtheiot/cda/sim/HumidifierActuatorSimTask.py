@@ -23,11 +23,17 @@ class HumidifierActuatorSimTask(BaseActuatorSimTask):
 	def __init__(self):
 		super(HumidifierActuatorSimTask, self).__init__(actuatorType = ActuatorData.HUMIDIFIER_ACTUATOR_TYPE, simpleName = "HUMIDIFIER")
 		
-		
+	"""
+	call activateActuator from parent class
+	@param actuator data value for simulation 
+	"""
 	def activateActuator(self, val: float) -> bool:
 		super(HumidifierActuatorSimTask, self).activateActuator(val);
 		return True;
-		
+	
+	"""
+	call deactivateActuator from parent class
+	"""	
 	def deactivateActuator(self) -> bool:
 		super(HumidifierActuatorSimTask, self).deactivateActuator();
 		return False;

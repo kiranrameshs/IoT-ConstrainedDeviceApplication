@@ -36,17 +36,12 @@ class DeviceDataManager(IDataMessageListener):
 		self.systemPerformanceManager = SystemPerformanceManager();
 		self.systemPerformanceManager.setDataMessageListener(self);
 		self.configUtil = ConfigUtil()	
-		
 		self.sensorAdapterManager = SensorAdapterManager();
 		self.sensorAdapterManager.setDataMessageListener(self);
-		
 		self.actuatorAdapterManager = ActuatorAdapterManager();
 		self.actuatorAdapterManager.setDataMessageListener(self);
-		
 		self.enableHandleTempChangeOnDevice = self.configUtil.getBoolean(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.ENABLE_HANDLE_TEMP_CHANGE_ON_DEVICE_KEY)
-
 		self.triggerHvacTempFloor = self.configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_TEMP_FLOOR_KEY);
-
 		self.triggerHvacTempCeiling = self.configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_TEMP_CEILING_KEY);
 			
 	def handleActuatorCommandResponse(self, data: ActuatorData) -> bool:
@@ -64,7 +59,6 @@ class DeviceDataManager(IDataMessageListener):
 		self.toJSON = DataUtil.sensorDataToJson(data);
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE,self.toJSON)
 		self._handleSensorDataAnalysis(data);
-		
 		return True;
 		
 	def handleSystemPerformanceMessage(self, data: SystemPerformanceData) -> bool:
@@ -72,7 +66,6 @@ class DeviceDataManager(IDataMessageListener):
 		self.toJSON = DataUtil.sensorDataToJson(data);
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE,self.toJSON)
 		self._handleSensorDataAnalysis(data);
-		
 		return True;
 	
 	def startManager(self):

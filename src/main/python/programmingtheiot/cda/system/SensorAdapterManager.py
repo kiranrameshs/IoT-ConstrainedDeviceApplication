@@ -72,7 +72,7 @@ class SensorAdapterManager(object):
 		else:
 			#Use simulator
 			humiditySensorData = self.humiditySenorSimTask.generateTelemetry()
-			print("humiditySensorData is "+str(humiditySensorData.getSensorType())+"  "+str(humiditySensorData.getValue()))
+			#print("humiditySensorData is "+str(humiditySensorData.getSensorType())+"  "+str(humiditySensorData.getValue()))
 			pressureSensorData = self.pressureSenorSimTask.generateTelemetry()
 			temperatureSensorData =  self.temperatureSenorSimTask.generateTelemetry()
 			

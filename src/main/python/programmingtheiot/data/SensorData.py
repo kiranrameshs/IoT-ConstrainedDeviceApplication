@@ -25,7 +25,6 @@ class SensorData(BaseIotData):
 		
 	def __init__(self, sensorType = DEFAULT_SENSOR_TYPE, d = None):
 		super(SensorData, self).__init__(d = d)
-		#Class scope variables initialized with constructor inputs
 		self.sensorType = sensorType;
 		self.value = self.DEFAULT_VAL;
 		pass
@@ -33,7 +32,6 @@ class SensorData(BaseIotData):
 	def getSensorType(self) -> int:
 		"""
 		Returns the sensor type to the caller.
-		
 		@return int
 		"""
 		return self.sensorType
@@ -46,6 +44,5 @@ class SensorData(BaseIotData):
 		self.value = newVal;
 		
 	def _handleUpdateData(self, data):
-		#Update the class variables from data
 		self.value = data.getValue();
 		self.sensorType = data.getSensorType();
