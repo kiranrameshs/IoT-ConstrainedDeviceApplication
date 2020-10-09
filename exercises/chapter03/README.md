@@ -1,49 +1,50 @@
 # Constrained Device Application (Connected Devices)
 
 ## Lab Module 03
-
-Be sure to implement all the PIOT-CDA-* issues (requirements) listed at [PIOT-INF-03-001 - Chapter 03](https://github.com/orgs/programming-the-iot/projects/1#column-10488379).
+  - Add functionality to shell implementation of BaseSensorSimTask
+  - Create all sensor simulator modules (HumiditySensorSimTask, PressureSensorSimTask, TemperatureSensorSimTask)
+  - Add functionality to shell implementation of BaseActuatorSimTask
+  - Create all actuator simulator modules (HumidifierActuatorSimTask, HvacActuatorSimTask)
+  - Create / edit module - SensorAdapterManager
+  - Create / edit module - ActuatorAdapterManager
+  - Create / edit module - DeviceDataManage
+  - Verify and merge Chapter 03 branch into the primary branch
 
 ### Description
 
-NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
-
 What does your implementation do? 
+In this lab module, Device Data Manager was made the controller of Sensor, Actuator and System Performance Managers. The main purpose of the implementation is to simulate the actuators and sensors. For this, we introduce few sensors such as Humidity, Pressure and Temperature sensors. Similarly, Humidifier and HVAC actuators. These are derived classed of BaseSensorSimTask and BaseActuatorSimTask where most of the implementation still resides in the parent class. As we need data for simulation, we implement Actuator and Sensor Data modules which are derived classes of BaseIoTData. With this implementation we have Sensors and Actuators simulation with respective data
+
 
 How does your implementation work?
+When the CDA app is run, DeviceDataManager is called to start and stop in the app's start / stop methods. 
+ - The startManager method invokes SensorAdapterManager and ActuatorAdaptorManager.
+ - Managers have schedulers that runs the jobs. 
+ - A SensorAdaptorManager gets minValue and maxValue of humidity, pressure and temperature from SensorDataGenerator. Ex: humidityFloor and humidityCeiling
+ - SensorData is formed callig dataGenerator. Ex: humidityData
+ - SensorSimTask sets a random value for the SensorData
+ - This sensorData is now available at DeviceDataManager for data analysis
+ Similarly, ActuatorAdaptorManager is used to generate the data required to simlaute the actuators and the ActuatorSimTask will send the commands to the Actuators
+
+
 
 ### Code Repository and Branch
 
-NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
-
-URL: 
+URL: https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/tree/chapter03
 
 ### UML Design Diagram(s)
-
-NOTE: Include one or more UML designs representing your solution. It's expected each
-diagram you provide will look similar to, but not the same as, its counterpart in the
-book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
+![CDA](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter03/uml/lab3_CDA.png?raw=true)
 
 
 ### Unit Tests Executed
 
-NOTE: TA's will execute your unit tests. You only need to list each test case below
-(e.g. ConfigUtilTest, DataUtilTest, etc). Be sure to include all previous tests, too,
-since you need to ensure you haven't introduced regressions.
-
-- 
-- 
-- 
+- All unit tests under part02 except DataUtilTest
 
 ### Integration Tests Executed
 
-NOTE: TA's will execute most of your integration tests using their own environment, with
-some exceptions (such as your cloud connectivity tests). In such cases, they'll review
-your code to ensure it's correct. As for the tests you execute, you only need to list each
-test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
+- SensorAdapterManagerTest
+ - ActuatorAdapterManagerTest
 
-- 
-- 
-- 
+
 
 EOF.
