@@ -27,16 +27,16 @@ class HumidifierActuatorSimTask(BaseActuatorSimTask):
 	call activateActuator from parent class
 	@param actuator data value for simulation 
 	"""
-	def activateActuator(self, val: float) -> bool:
-		super(HumidifierActuatorSimTask, self).activateActuator(val);
-		return True;
+# 	def activateActuator(self, val: float) -> bool:
+# 		super(HumidifierActuatorSimTask, self).activateActuator(val);
+# 		return True;
 	
 	"""
 	call deactivateActuator from parent class
 	"""	
-	def deactivateActuator(self) -> bool:
-		super(HumidifierActuatorSimTask, self).deactivateActuator();
-		return False;
+# 	def deactivateActuator(self) -> bool:
+# 		super(HumidifierActuatorSimTask, self).deactivateActuator();
+# 		return False;
 		
-	def updateActuator(self, data: ActuatorData) -> ActuatorData:
-		return super(HumidifierActuatorSimTask, self).updateActuator(data);
+# 	def updateActuator(self, data: ActuatorData) -> ActuatorData:
+# 		return super(HumidifierActuatorSimTask, self).updateActuator(data);

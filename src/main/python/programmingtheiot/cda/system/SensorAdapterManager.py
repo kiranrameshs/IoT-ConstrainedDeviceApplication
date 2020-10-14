@@ -37,6 +37,23 @@ class SensorAdapterManager(object):
 		self.scheduler.add_job(self.handleTelemetry, 'interval', seconds = self.pollRate)
 		if(self.useEmulator):
 			logging.info("Using Emulators")
+			
+			# load the Humidity emulator
+			humidityModule = __import__('programmingtheiot.cda.emulated.HumiditySensorEmulatorTask', fromlist = ['HumiditySensorEmulatorTask'])
+			heClazz = getattr(humidityModule, 'HumiditySensorEmulatorTask')
+			self.humidityEmulator = heClazz()
+			
+			# load the Temperature emulator
+			tempModule = __import__('programmingtheiot.cda.emulated.HumiditySensorEmulatorTask', fromlist = ['HumiditySensorEmulatorTask'])
+			tempClazz = getattr(tempModule, 'HumiditySensorEmulatorTask')
+			self.tempEmulator = tempClazz()
+			
+			# load the Pressure emulator
+			pressureModule = __import__('programmingtheiot.cda.emulated.HumiditySensorEmulatorTask', fromlist = ['HumiditySensorEmulatorTask'])
+			pClazz = getattr(pressureModule, 'HumiditySensorEmulatorTask')
+			self.pressureEmulator = pClazz()
+			
+			
 		else:
 			logging.info("Using Simulators")
 			
@@ -67,12 +84,19 @@ class SensorAdapterManager(object):
 			
 	def handleTelemetry(self):
 		if(self.useEmulator == True):
-			#Use emulator(currently not implemented)
-			pass
+			#Use emulator
+			humiditySensorData = self.humidityEmulator.generateTelemetry()
+# 			logging.info("humiditySensorData is "+str(humiditySensorData))
+			pressureSensorData = self.pressureEmulator.generateTelemetry()
+			temperatureSensorData =  self.tempEmulator.generateTelemetry()
+			
+			self.dataMessageListener.handleSensorMessage(humiditySensorData)
+			self.dataMessageListener.handleSensorMessage(pressureSensorData)
+			self.dataMessageListener.handleSensorMessage(temperatureSensorData)
+			
 		else:
 			#Use simulator
 			humiditySensorData = self.humiditySenorSimTask.generateTelemetry()
-			#print("humiditySensorData is "+str(humiditySensorData.getSensorType())+"  "+str(humiditySensorData.getValue()))
 			pressureSensorData = self.pressureSenorSimTask.generateTelemetry()
 			temperatureSensorData =  self.temperatureSenorSimTask.generateTelemetry()
 			

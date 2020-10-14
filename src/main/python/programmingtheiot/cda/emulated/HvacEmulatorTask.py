@@ -26,8 +26,9 @@ class HvacEmulatorTask(BaseActuatorSimTask):
 	"""
 
 	def __init__(self):
-		pass
+		super(HvacEmulatorTask, self).__init__(actuatorType = ActuatorData.HVAC_ACTUATOR_TYPE, simpleName = "HVAC")
+		self.sh = SenseHAT(emulate = True)
 
-	def _handleActuation(self, cmd: int, val: float = 0.0, stateData: str = None) -> int:
-		pass
+	def updateActuator(self, data: ActuatorData) -> bool:
+		return super(HvacEmulatorTask, self).updateActuator(data);
 	

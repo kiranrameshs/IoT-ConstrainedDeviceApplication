@@ -40,14 +40,30 @@ class BaseActuatorSimTask():
 	
 	def updateActuator(self, data: ActuatorData) -> bool:
 		if(data):
-			if(data.getCommand() == 1):
-				self.activateActuator(data.getValue())
-			elif(data.getCommand() == 0):
-				self.deactivateActuator()
+# 			if(data.getCommand() == 1):
+# 				self.activateActuator(data.getValue())
+# 			elif(data.getCommand() == 0):
+# 				self.deactivateActuator()
+			self._handleActuation(data.getCommand(),data.getValue(),data.getStateData());
 			self.actuatorData = data;
 			self.actuatorData.setStatusCode(data.getStatusCode());
 			self.actuatorData.setAsResponse();
 			return True
 		else:
 			return False;
+		
+	def _handleActuation(self, cmd: int, val: float = 0.0, stateData: str = None) -> int:
+		"""
+		Simple implementation that invokes activate or deactivate in super class.
+		
+		@param cmd The actuation command to process.
+		@param stateData The string state data to use in processing the command.
+		@return int The status code from the actuation call.
+		"""
+		if cmd is ActuatorData.COMMAND_ON:
+			self.activateActuator(val)
+		elif cmd is ActuatorData.COMMAND_OFF:
+			self.deactivateActuator()
+		
+		return 0
 		

@@ -24,7 +24,13 @@ class TemperatureSensorEmulatorTask(BaseSensorSimTask):
 	"""
 
 	def __init__(self, dataSet = None):
-		pass
-	
+		super(TemperatureSensorEmulatorTask, self).__init__(SensorData.TEMP_SENSOR_TYPE, minVal = SensorDataGenerator.LOW_NORMAL_INDOOR_TEMP, maxVal = SensorDataGenerator.HI_NORMAL_INDOOR_TEMP)
+		self.sh = SenseHAT(emulate = True);
+		
 	def generateTelemetry(self) -> SensorData:
-		pass
+		sensorData = SensorData(sensorType = self.sensorType)
+		sensorVal = self.sh.environ.temperature		
+		sensorData.setValue(sensorVal)
+		self.latestSensorData = sensorData
+
+		return sensorData
