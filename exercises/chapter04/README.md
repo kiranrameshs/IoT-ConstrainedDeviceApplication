@@ -1,49 +1,63 @@
 # Constrained Device Application (Connected Devices)
 
 ## Lab Module 04
-
-Be sure to implement all the PIOT-CDA-* issues (requirements) listed at [PIOT-INF-04-001 - Chapter 04](https://github.com/orgs/programming-the-iot/projects/1#column-10488386).
+  - Install and configure the SenseHAT emulator and supporting libraries for your platform
+  - Create all actuator emulator modules (HumidityEmulatorTask, PressureEmulatorTask, TemperatureEmulatorTask)
+  - Add emulator functionality to SensorAdapterManager
+  - Add emulator functionality to ActuatorAdapterManager
 
 ### Description
 
-NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
-
 What does your implementation do? 
+In this lab module, the main agenda is to add the emulator to the CDA app just like the simulator implementation module. The approach of using the emulator is to use it on the bash of Ubuntu on Windows. Now the data of the sensor and the actuator is by using the emulator
+System Info:
+ - Windows 10
+ - Ubuntu 18.04 used on WSL2
+ - Xming as server for diplay (emulator GUI)
+ - Xlaunch for configuring the display server
+ - PyGObject for GTK based GUI
+ - Sense HAT emulator
+ - PiSense (APIs for Sense HAT)
+ 
+ Issues/Dependencies:
+ - export DISPLAY='<serverIP>:0.0'
+ - update X0Hosts on server to allow clients IP
+ - Update PYTHONPATH as per Lab Module 1
+ - Install basic imports to replicate the venv.
+ 
+ 
 
 How does your implementation work?
+When the CDA app is run, DeviceDataManager is called to start and stop in the app's start / stop methods. 
+ - The startManager method invokes SensorAdapterManager and ActuatorAdaptorManager.
+ - Managers have schedulers that runs the jobs. 
+ - A SensorAdaptorManager checks if useEmulators is true or false. If true, uses the current implementation of getting the data from the emulator else gets minValue and maxValue of humidity, pressure and temperature from SensorDataGenerator
+ - SensorData is formed calling humidityEmulator, similarly for pressure and temperature
+ - This sensorData is now available at DeviceDataManager for data analysis
+ Similarly, ActuatorAdaptorManager is used to generate the data required to simulate/emulate the actuators and the ActuatorSimTask will send the commands to the Actuators
+
+
 
 ### Code Repository and Branch
 
-NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
-
-URL: 
+URL: https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/tree/chapter04
 
 ### UML Design Diagram(s)
-
-NOTE: Include one or more UML designs representing your solution. It's expected each
-diagram you provide will look similar to, but not the same as, its counterpart in the
-book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
+![CDA](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter04/uml/lab4_CDA.png?raw=true)
 
 
 ### Unit Tests Executed
 
-NOTE: TA's will execute your unit tests. You only need to list each test case below
-(e.g. ConfigUtilTest, DataUtilTest, etc). Be sure to include all previous tests, too,
-since you need to ensure you haven't introduced regressions.
-
-- 
-- 
-- 
+- All unit tests under part02 except DataUtilTest
 
 ### Integration Tests Executed
+ - ./emulated/SenseHatEmulatorQuickTest
+ - ./emulated/SensorEmulatorManagerTest
+ - ./emulated/ActuatorEmulatorManagerTest
 
-NOTE: TA's will execute most of your integration tests using their own environment, with
-some exceptions (such as your cloud connectivity tests). In such cases, they'll review
-your code to ensure it's correct. As for the tests you execute, you only need to list each
-test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
+ - SensorAdapterManagerTest
+ - ActuatorAdapterManagerTest
 
-- 
-- 
-- 
+
 
 EOF.

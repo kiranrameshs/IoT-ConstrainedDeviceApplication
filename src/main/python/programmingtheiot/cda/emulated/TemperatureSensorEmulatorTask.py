@@ -25,7 +25,12 @@ class TemperatureSensorEmulatorTask(BaseSensorSimTask):
 
 	def __init__(self, dataSet = None):
 		super(TemperatureSensorEmulatorTask, self).__init__(SensorData.TEMP_SENSOR_TYPE, minVal = SensorDataGenerator.LOW_NORMAL_INDOOR_TEMP, maxVal = SensorDataGenerator.HI_NORMAL_INDOOR_TEMP)
-		self.sh = SenseHAT(emulate = True);
+		senseHatKey = self.configUtil.getBoolean(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.ENABLE_SENSE_HAT_KEY);
+		if(senseHatKey):
+			enableEmulation = False;
+		else:
+			enableEmulation = True;
+		self.sh = SenseHAT(emulate = enableEmulation)
 		
 	def generateTelemetry(self) -> SensorData:
 		sensorData = SensorData(sensorType = self.sensorType)
