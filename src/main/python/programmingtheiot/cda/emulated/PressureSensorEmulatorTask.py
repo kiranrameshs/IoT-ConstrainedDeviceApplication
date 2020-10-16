@@ -25,6 +25,7 @@ class PressureSensorEmulatorTask(BaseSensorSimTask):
 
 	def __init__(self, dataSet = None):
 		super(PressureSensorEmulatorTask, self).__init__(SensorData.PRESSURE_SENSOR_TYPE, minVal = SensorDataGenerator.LOW_NORMAL_ENV_PRESSURE, maxVal = SensorDataGenerator.HI_NORMAL_ENV_PRESSURE)
+		self.configUtil = ConfigUtil()
 		senseHatKey = self.configUtil.getBoolean(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.ENABLE_SENSE_HAT_KEY);
 		if(senseHatKey):
 			enableEmulation = False;

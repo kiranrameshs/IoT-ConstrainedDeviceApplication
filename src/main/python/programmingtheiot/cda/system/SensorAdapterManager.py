@@ -24,9 +24,9 @@ from math import fabs
 
 class SensorAdapterManager(object):
 	"""
-	Shell representation of class for student implementation.
+	Initialize the data based on Emulators/simulators
 	"""
-	def __init__(self, useEmulator: bool = False, pollRate: int = 5, allowConfigOverride: bool = True):
+	def __init__(self, useEmulator: bool = True, pollRate: int = 5, allowConfigOverride: bool = True):
 		self.dataMessageListener = None;
 		self.useEmulator = useEmulator;
 		self.pollRate = pollRate;
