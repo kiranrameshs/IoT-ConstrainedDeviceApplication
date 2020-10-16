@@ -18,13 +18,25 @@ from programmingtheiot.cda.sim.SensorDataGenerator import SensorDataGenerator
 from pisense import SenseHAT
 
 class HumiditySensorEmulatorTask(BaseSensorSimTask):
-	"""
-	Shell representation of class for student implementation.
-	
-	"""
 
 	def __init__(self, dataSet = None):
-		pass
-	
+		super(HumiditySensorEmulatorTask, self).__init__(SensorData.HUMIDITY_SENSOR_TYPE, minVal = SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY, maxVal = SensorDataGenerator.HI_NORMAL_ENV_HUMIDITY)
+		self.configUtil = ConfigUtil()
+		senseHatKey = self.configUtil.getBoolean(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.ENABLE_SENSE_HAT_KEY);
+		if(senseHatKey):
+			enableEmulation = False;
+		else:
+			enableEmulation = True;
+		self.sh = SenseHAT(emulate = enableEmulation)
+		
+	'''
+	@param : none
+	output : SensorData
+	description : Use the respective SenseHat API to get the value 
+	'''
 	def generateTelemetry(self) -> SensorData:
-		pass
+		sensorData = SensorData(sensorType = self.sensorType)
+		sensorVal = self.sh.environ.humidity		
+		sensorData.setValue(sensorVal)
+		self.latestSensorData = sensorData
+		return sensorData

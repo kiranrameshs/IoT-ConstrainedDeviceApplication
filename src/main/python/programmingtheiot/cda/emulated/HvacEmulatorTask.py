@@ -26,8 +26,15 @@ class HvacEmulatorTask(BaseActuatorSimTask):
 	"""
 
 	def __init__(self):
-		pass
+		super(HvacEmulatorTask, self).__init__(actuatorType = ActuatorData.HVAC_ACTUATOR_TYPE, simpleName = "HVAC")
+		self.configUtil = ConfigUtil()
+		senseHatKey = self.configUtil.getBoolean(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.ENABLE_SENSE_HAT_KEY);
+		if(senseHatKey):
+			enableEmulation = False;
+		else:
+			enableEmulation = True;
+		self.sh = SenseHAT(emulate = enableEmulation)
 
-	def _handleActuation(self, cmd: int, val: float = 0.0, stateData: str = None) -> int:
-		pass
+	def updateActuator(self, data: ActuatorData) -> bool:
+		return super(HvacEmulatorTask, self).updateActuator(data);
 	

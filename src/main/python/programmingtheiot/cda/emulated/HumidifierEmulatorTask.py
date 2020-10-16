@@ -26,7 +26,14 @@ class HumidifierEmulatorTask(BaseActuatorSimTask):
 	"""
 
 	def __init__(self):
-		pass
-
-	def _handleActuation(self, cmd: int, val: float = 0.0, stateData: str = None) -> int:
-		pass
+		super(HumidifierEmulatorTask, self).__init__(actuatorType = ActuatorData.HUMIDIFIER_ACTUATOR_TYPE, simpleName = "HUMIDIFIER")
+		self.configUtil = ConfigUtil()
+		senseHatKey = self.configUtil.getBoolean(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.ENABLE_SENSE_HAT_KEY);
+		if(senseHatKey):
+			enableEmulation = False;
+		else:
+			enableEmulation = True;
+		self.sh = SenseHAT(emulate = enableEmulation)
+		
+	def updateActuator(self, data: ActuatorData) -> bool:
+		return super(HumidifierEmulatorTask, self).updateActuator(data);

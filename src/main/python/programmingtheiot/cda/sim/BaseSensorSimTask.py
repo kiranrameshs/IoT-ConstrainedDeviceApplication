@@ -15,16 +15,14 @@ from programmingtheiot.data.SensorData import SensorData
 class BaseSensorSimTask():
 	"""
 	Shell representation of class for student implementation.
-	
 	"""
-
+	#initialize index and sensorData variables with default
 	DEFAULT_MIN_VAL = 0.0
 	DEFAULT_MAX_VAL = 1000.0
 	dataSet = None
 	sensorType = 0
 	minVal = 0.0
 	maxVal = 0.0
-	#initialize index and sensorData variables with default
 	currentDataIndex=0;
 	useRandomizer = True;
 	latestSensorData = None;
@@ -40,7 +38,6 @@ class BaseSensorSimTask():
 	output : SensorData
 	description : Initialize the SensorData class and Get random value for sensorData if random flag is enabled
 	'''
-		
 	def generateTelemetry(self) -> SensorData:
 		sensorData = SensorData();
 		sensorData.sensorType = self.sensorType;
@@ -61,7 +58,6 @@ class BaseSensorSimTask():
 	output : sensorData.value
 	description :return latest sensorData value else generateTelemetry and then return
 	'''
-
 	def getTelemetryValue(self) -> float:
 		if(self.latestSensorData != None):
 			return self.latestSensorData.getValue();
