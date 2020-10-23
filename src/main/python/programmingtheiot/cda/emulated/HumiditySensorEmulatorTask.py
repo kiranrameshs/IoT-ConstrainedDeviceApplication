@@ -16,6 +16,7 @@ from programmingtheiot.cda.sim.BaseSensorSimTask import BaseSensorSimTask
 from programmingtheiot.cda.sim.SensorDataGenerator import SensorDataGenerator
 
 from pisense import SenseHAT
+import logging
 
 class HumiditySensorEmulatorTask(BaseSensorSimTask):
 
@@ -36,7 +37,8 @@ class HumiditySensorEmulatorTask(BaseSensorSimTask):
 	'''
 	def generateTelemetry(self) -> SensorData:
 		sensorData = SensorData(sensorType = self.sensorType)
-		sensorVal = self.sh.environ.humidity		
+		sensorVal = self.sh.environ.humidity
+		logging.info(sensorVal);		
 		sensorData.setValue(sensorVal)
 		self.latestSensorData = sensorData
 		return sensorData
