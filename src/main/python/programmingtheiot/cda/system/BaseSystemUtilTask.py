@@ -16,22 +16,25 @@ class BaseSystemUtilTask():
 	"""
 	
 	def __init__(self):
-		###
-		# TODO: fill in the details here
 		self.latestSensorData = None
 		
 		pass
 	
 	def generateTelemetry(self) -> SensorData:
-		###
-		# TODO: fill in the details here
-		#
-		# NOTE: Use self._getSystemUtil() to retrieve the value from the sub-class
-		pass
+		"""
+		Get latest sensor data using getsystemUtil methpd from respective derived classes
+		@return: Latest Sensor Data
+		"""
+		self.latestSensorData = SensorData();
+		self.latestSensorData.setValue(self._getSystemUtil());
+		return self.latestSensorData;
 		
 	def getTelemetryValue(self) -> float:
-		val = self._getSystemUtil()
-		logging.info(self.__class__.__name__+" Value is "+str(val))
+		if(self.latestSensorData.getValue()):
+			val = self.latestSensorData.getValue();
+		else:
+			sd = self.generateTelemetry();
+			val = sd.getValue();
 		return val
 	
 	def _getSystemUtil(self) -> float:

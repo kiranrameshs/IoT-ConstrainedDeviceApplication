@@ -128,7 +128,7 @@ class DataUtilTest(unittest.TestCase):
 		self.assertEqual(sdObj1.getTimeStamp(), sdObj2.getTimeStamp())
 		self.assertEqual(sdObj1Str, sdObj2Str)
 
-	@unittest.skip("Ignore for now.")
+	#@unittest.skip("Ignore for now.")
 	def testSystemPerformanceConversionsFromJson(self):
 		logging.info("\n\n----- [SystemPerformanceData Conversions from JSON] -----")
 		
@@ -144,7 +144,7 @@ class DataUtilTest(unittest.TestCase):
 		self.assertEqual(self.spdName, spdObj2.getName())
 		self.assertEqual(spdObj1.getTimeStamp(), spdObj2.getTimeStamp())
 
-	@unittest.skip("Ignore for now.")
+	#@unittest.skip("Ignore for now.")
 	def testSystemPerformanceDataConversionsFromObject(self):
 		logging.info("\n\n----- [JSON Conversions from SystemPerformanceData] -----")
 		

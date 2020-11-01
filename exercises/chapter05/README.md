@@ -1,49 +1,43 @@
 # Constrained Device Application (Connected Devices)
 
 ## Lab Module 05
-
-Be sure to implement all the PIOT-CDA-* issues (requirements) listed at [PIOT-INF-05-001 - Chapter 05](https://github.com/orgs/programming-the-iot/projects/1#column-10488421).
+  - Install and configure Redis for your platform (optional, not used for this course work)
+  - JSON encoder implementation in DataUtil
+  - Add functionality to BaseSystemUtilTask implementation
 
 ### Description
 
-NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
-
 What does your implementation do? 
+In this lab module, the goal is to implement the data management utilities. First, the DataUtil module is updated to handle the received JSON payload and convert it to respective data type (Actuator Data, Sensor Data, SystemPerformance Data) and viceversa i.e. these data types back to JSON format for sending the messages out of CDA. In BaseSystemUtilTask, generateTelemetry() is updated to set the latest sensor data value from _getSystemUtil(). So, in the getTelemetryValue(), check if latest sensor data is available else call generateTelemetry()
+ 
+ 
 
 How does your implementation work?
+When the CDA app is run, DeviceDataManager is called to start and stop in the app's start / stop methods. 
+ - The startManager method invokes SensorAdapterManager and ActuatorAdaptorManager.
+ - SensorAdaptorManager uses Simulators/Emulators to form SensorData
+ - Similarly, ActuatorAdaptorManager is used to generate ActuatorData
+ - This sensorData and ActuatorData is now available at DeviceDataManager
+ - Data communication between CDA and GDA happens with JSON format. So, functions such as actuatorDataToJson uses json.dumps command to convert data to json format. Similarly, json data is converted to restpective data types using dictionary in Python with keys to find the values and set attributes.
+
+
 
 ### Code Repository and Branch
 
-NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
-
-URL: 
+URL: https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/tree/chapter05
 
 ### UML Design Diagram(s)
-
-NOTE: Include one or more UML designs representing your solution. It's expected each
-diagram you provide will look similar to, but not the same as, its counterpart in the
-book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
+![CDA](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter05/uml/lab5_CDA.png?raw=true)
 
 
 ### Unit Tests Executed
 
-NOTE: TA's will execute your unit tests. You only need to list each test case below
-(e.g. ConfigUtilTest, DataUtilTest, etc). Be sure to include all previous tests, too,
-since you need to ensure you haven't introduced regressions.
-
-- 
-- 
-- 
+- DataUtilTest test under part02 unit tests 
+- All unit tests under part01 (SystemCpuUtilTaskTest, MemUtilTaskTest, DiskUtilTaskTest)
 
 ### Integration Tests Executed
+ - ./integration/DataIntegrationTest
 
-NOTE: TA's will execute most of your integration tests using their own environment, with
-some exceptions (such as your cloud connectivity tests). In such cases, they'll review
-your code to ensure it's correct. As for the tests you execute, you only need to list each
-test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
 
-- 
-- 
-- 
 
 EOF.
