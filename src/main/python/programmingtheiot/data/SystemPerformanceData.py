@@ -11,7 +11,7 @@ from programmingtheiot.data.BaseIotData import BaseIotData
 
 class SystemPerformanceData(BaseIotData):
 	"""
-	Shell representation of class for student implementation.
+	Class with attributes, data and methods for SysPerf data
 	
 	"""
 	DEFAULT_VAL = 0.0

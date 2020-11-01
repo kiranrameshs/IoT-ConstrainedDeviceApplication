@@ -11,7 +11,7 @@ from programmingtheiot.data.BaseIotData import BaseIotData
 
 class ActuatorData(BaseIotData):
 	"""
-	Shell representation of class for student implementation.
+	Class with attributes, data and methods for Actuator data
 	
 	"""
 	DEFAULT_COMMAND = 0

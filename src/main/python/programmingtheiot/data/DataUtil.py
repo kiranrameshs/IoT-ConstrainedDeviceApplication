@@ -15,13 +15,13 @@ from programmingtheiot.data.SystemPerformanceData import SystemPerformanceData
 
 class DataUtil():
 	"""
-	Shell representation of class for student implementation.
+	Methods to convert Actuator, Sensor, SystemPerformance data to JSON and viceversa
 	
 	"""
 
 	def __init__(self, encodeToUtf8 = False):
 		pass
-	
+ 
 	def actuatorDataToJson(self, actuatorData):
 		jsonData = json.dumps(actuatorData, indent = 4, cls = JsonDataEncoder, ensure_ascii = True)
 		return jsonData

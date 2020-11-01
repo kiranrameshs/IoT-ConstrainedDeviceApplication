@@ -21,20 +21,20 @@ class BaseSystemUtilTask():
 		pass
 	
 	def generateTelemetry(self) -> SensorData:
+		"""
+		Get latest sensor data using getsystemUtil methpd from respective derived classes
+		@return: Latest Sensor Data
+		"""
 		self.latestSensorData = SensorData();
 		self.latestSensorData.setValue(self._getSystemUtil());
-		print("latestSensorData value "+str(self.latestSensorData.getValue()))
 		return self.latestSensorData;
 		
 	def getTelemetryValue(self) -> float:
 		if(self.latestSensorData.getValue()):
-			print("latestSensorData available");
 			val = self.latestSensorData.getValue();
 		else:
 			sd = self.generateTelemetry();
 			val = sd.getValue();
-# 			val = self._getSystemUtil()
-# 			logging.info(self.__class__.__name__+" Value is "+str(val))
 		return val
 	
 	def _getSystemUtil(self) -> float:

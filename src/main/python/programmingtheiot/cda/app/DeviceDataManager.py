@@ -28,7 +28,7 @@ from programmingtheiot.data.DataUtil import DataUtil
 
 class DeviceDataManager(IDataMessageListener):
 	"""
-	Shell representation of class for student implementation.
+	Initialize the Actuator, Sensor, Comm Managers, Data Util
 	
 	"""
 	
