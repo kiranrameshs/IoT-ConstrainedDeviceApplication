@@ -72,7 +72,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 		
 		self.mcc.disconnect()
 
-	#@unittest.skip("Ignore for now.")
+	@unittest.skip("Ignore for now.")
 	def testIntegrateWithGdaSubscribeCdaCmdTopic(self):
 		qos = 1
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)

@@ -1,49 +1,73 @@
 # Constrained Device Application (Connected Devices)
 
 ## Lab Module 06
-
-Be sure to implement all the PIOT-CDA-* issues (requirements) listed at [PIOT-INF-06-001 - Chapter 06](https://github.com/orgs/programming-the-iot/projects/1#column-10488434).
+  - Install and configure Mosquitto MQTT Broker for your platform
+  - Create module MqttClientConnector
+  - Create the callback infrastructure for the MqttClientConnector
+  - Create the publish and subscribe methods for MqttClientConnector
+  - Connect MqttClientConnector to DeviceDataManager
 
 ### Description
 
-NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
-
 What does your implementation do? 
+In this lab module, the goal is to implement the MqttClientConnector module and initialize it from the Device Data Manager module. Once the MQTT client integration is complete, the messages are communicated between the CDA and GDA using MQTT broker. The module MqttClientConnector uses the APIs connect, subscribe, publish, unsubscribe, disconnect from the message broker. For CDA, the incoming messages are Actuator data Commands from the GDA and the outgoing messages are sensor Data messages. Once the Actuator command message  is received, it is passed to the Actuator Emulator to be used. When the sensor data is available, the CDA subscribes to the MQTT broker topic, publishes the sensor data.
+ 
+ 
 
 How does your implementation work?
+When the CDA app is run, DeviceDataManager is called to start and stop in the app's start / stop methods. 
+ - The startManager method creates the MQTT client connection and connects to the MQTT broker depending on the configurations 
+ -  Once the message is received by the Device Data manager from the broker to the subscribed topic, the actuator command passed to the respective data class to be utilized
+ - If the sensor data is available, then the data is published to the subcribed topic
+ - Once the StopManager() is triggered, then the client connection to the MQTT broker is disconnected and closed
+
+
 
 ### Code Repository and Branch
 
-NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
-
-URL: 
+URL: https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/tree/chapter06
 
 ### UML Design Diagram(s)
+![CDA](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/uml/lab6_CDA.png?raw=true)
 
-NOTE: Include one or more UML designs representing your solution. It's expected each
-diagram you provide will look similar to, but not the same as, its counterpart in the
-book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
-
-
+### Wireshark PCAP capture Snap(s)
+ #### - CONNECT
+ 
+ #### - CONNACK
+ 
+ #### - PUBLISH
+ 
+ #### - PUBACK
+ 
+ #### - PUBREC
+ 
+ #### - PUBREL
+ 
+ #### - PUBCOMP
+ 
+ #### - SUBSCRIBE
+ 
+ #### - SUBACK
+ 
+ #### - UNSUBSCRIBE
+ 
+ #### - UNSUBACK
+ 
+ #### - PINGREQ
+ 
+ #### - PINGRESP
+ 
+ #### - DISCONNECT
+ 
 ### Unit Tests Executed
 
-NOTE: TA's will execute your unit tests. You only need to list each test case below
-(e.g. ConfigUtilTest, DataUtilTest, etc). Be sure to include all previous tests, too,
-since you need to ensure you haven't introduced regressions.
-
-- 
-- 
-- 
+ - All Unit tests under part01
+ - All Unit tests under part02
 
 ### Integration Tests Executed
 
-NOTE: TA's will execute most of your integration tests using their own environment, with
-some exceptions (such as your cloud connectivity tests). In such cases, they'll review
-your code to ensure it's correct. As for the tests you execute, you only need to list each
-test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
+ -  ./src/test/java/programmingtheiot/part03/integration/MqttClientConnectorTest
 
-- 
-- 
-- 
+
 
 EOF.
