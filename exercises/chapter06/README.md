@@ -31,33 +31,35 @@ URL: https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh
 ![CDA](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/uml/lab6_CDA.png?raw=true)
 
 ### Wireshark PCAP capture Snap(s)
+
  #### - CONNECT
- 
+ ![CONNECT](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/CONNECT.PNG?raw=true) 
  #### - CONNACK
- 
+ ![CONNACK](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/CONNACK.PNG?raw=true) 
  #### - PUBLISH
- 
+ ![PUBLISH](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/PUBLISH.PNG?raw=true) 
  #### - PUBACK
- 
+ ![PUBACK](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/PUBACK.PNG?raw=true)  
  #### - PUBREC
- 
+ ![PUBREC](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/PUBREC.PNG?raw=true)  
  #### - PUBREL
- 
+ ![PUBREL](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/PUBREL.PNG?raw=true)  
  #### - PUBCOMP
- 
+ ![PUBCOMP](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/PUBCOMP.PNG?raw=true)  
  #### - SUBSCRIBE
- 
+ ![SUBSCRIBE](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/SUBSCRIBE.PNG?raw=true)  
  #### - SUBACK
- 
+ ![SUBACK](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/SUBACK.PNG?raw=true)  
  #### - UNSUBSCRIBE
- 
+ ![UNSUBSCRIBE](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/UNSUBSCRIBE.PNG?raw=true)  
  #### - UNSUBACK
- 
+ ![UNSUBACK](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/UNSUBACK.PNG?raw=true)  
  #### - PINGREQ
- 
+ ![PINGREQ](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/PINGREQ.PNG?raw=true)  
  #### - PINGRESP
- 
+ ![PINGRESP](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/PINGRESP.PNG?raw=true)  
  #### - DISCONNECT
+ ![DISCONNECT](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter06/pcap/DISCONNECT.PNG?raw=true) 
  
 ### Unit Tests Executed
 
