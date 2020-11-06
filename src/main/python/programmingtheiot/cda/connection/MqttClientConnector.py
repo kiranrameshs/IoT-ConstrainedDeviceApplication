@@ -38,37 +38,86 @@ class MqttClientConnector(IPubSubClient):
 		the same clientID continuously attempts to re-connect, causing the broker to
 		disconnect the previous instance.
 		"""
-		pass
-
+		self.config = ConfigUtil.ConfigUtil()
+		self.host = self.config.getProperty(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.HOST_KEY, ConfigConst.DEFAULT_HOST)
+		self.port = self.config.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.PORT_KEY, ConfigConst.DEFAULT_MQTT_PORT)
+		self.keepAlive = self.config.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
+		logging.info('\tMQTT Broker Host: ' + self.host)
+		logging.info('\tMQTT Broker Port: ' + str(self.port))
+		logging.info('\tMQTT Keep Alive:  ' + str(self.keepAlive))
+		self.mc = mqttClient.Client(client_id = clientID, clean_session = True)
+		self.clientID = clientID;
+		
 	def connect(self) -> bool:
-		pass
+		if not self.mc:
+			self.mc = mqttClient.Client(client_id = self.clientID, clean_session = True)
+			self.mc.on_connect = self.onConnect
+			self.mc.on_disconnect = self.onDisconnect
+			self.mc.on_message = self.onMessage
+			self.mc.on_publish = self.onPublish
+			self.mc.on_subscribe = self.onSubscribe
+		if not self.mc.is_connected():
+			logging.info('Not connected to Broker, connecting now ')
+			self.mcc = self.mc.connect(self.host, self.port, self.keepAlive)
+			logging.info(str(self.mcc));
+			self.mc.loop_start()
+			logging.info('Broker connected successfully ')
+		else:
+			logging.warn('MQTT client is already connected. Ignoring connect request.')
+			return False
 		
 	def disconnect(self) -> bool:
-		pass
+		if self.mc.is_connected():
+			self.mc.disconnect()
+			self.mc.loop_stop()
+			logging.info('Disconnected successfully ')
 		
 	def onConnect(self, client, userdata, flags, rc):
-		pass
-		
+		logging.info("On Connect")
+				
 	def onDisconnect(self, client, userdata, rc):
-		pass
-		
+		logging.info("On Disconnect")
+				
 	def onMessage(self, client, userdata, msg):
-		pass
-			
+		logging.info("On Message")
+					
 	def onPublish(self, client, userdata, mid):
-		pass
-	
+		logging.info("Publish "+str(mid));
+			
 	def onSubscribe(self, client, userdata, mid, granted_qos):
-		pass
-	
+		logging.info("Subscribe "+str(mid));
+			
 	def publishMessage(self, resource: ResourceNameEnum, msg, qos: int = IPubSubClient.DEFAULT_QOS):
-		pass
-	
+		logging.info("Publish Message")
+		if(not ResourceNameEnum):
+			return False
+		if(qos<0 or qos>2):
+			qos = self.DEFAULT_QOS
+		if self.mc.is_connected():
+			self.mc.publish(str(resource),msg,qos);
+			logging.info("Publish message succesful");
+			return True
+		else:
+			return False
+		
 	def subscribeToTopic(self, resource: ResourceNameEnum, qos: int = IPubSubClient.DEFAULT_QOS):
-		pass
+		logging.info("Subscribe Topic")
+		if(not ResourceNameEnum):
+			return False
+		if(qos<0 or qos>2):
+			qos = self.DEFAULT_QOS
+		if self.mc.is_connected():
+			self.mc.subscribe(str(resource),qos);
+			logging.info("Subscribe Topic successful");
+			return True
+		else:
+			return False
 	
 	def unsubscribeFromTopic(self, resource: ResourceNameEnum):
-		pass
+		self.mc.unsubscribe(str(resource));
+		logging.info("Unsubscribe succesful");
+		return False
 
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
-		pass
+		logging.info("Message listener");
+		return False
