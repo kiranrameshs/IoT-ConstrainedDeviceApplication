@@ -8,6 +8,7 @@
 #
 
 import logging
+from time import sleep
 
 from programmingtheiot.cda.connection.CoapClientConnector import CoapClientConnector
 from programmingtheiot.cda.connection.MqttClientConnector import MqttClientConnector
@@ -36,6 +37,8 @@ class DeviceDataManager(IDataMessageListener):
 		self.systemPerformanceManager = SystemPerformanceManager();
 		self.systemPerformanceManager.setDataMessageListener(self);
 		self.configUtil = ConfigUtil()	
+		self.mqttClient = MqttClientConnector();
+		self.enableMqtt = enableMqtt;
 		self.sensorAdapterManager = SensorAdapterManager();
 		self.sensorAdapterManager.setDataMessageListener(self);
 		self.actuatorAdapterManager = ActuatorAdapterManager();
@@ -59,6 +62,20 @@ class DeviceDataManager(IDataMessageListener):
 		self.toJSON = DataUtil.sensorDataToJson(data);
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE,self.toJSON)
 		self._handleSensorDataAnalysis(data);
+		
+		self.mqttClient.connect()
+		self.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE)
+		sleep(5)
+		
+		self.mqttClient.publishMessage(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, str(data))
+		sleep(5)
+		
+		self.mqttClient.unsubscribeFromTopic(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE)
+		sleep(5)
+		
+		
+		self.mqttClient.disconnect()
+		sleep(5)
 		return True;
 		
 	def handleSystemPerformanceMessage(self, data: SystemPerformanceData) -> bool:
@@ -66,17 +83,35 @@ class DeviceDataManager(IDataMessageListener):
 		self.toJSON = DataUtil.sensorDataToJson(data);
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE,self.toJSON)
 		self._handleSensorDataAnalysis(data);
+		self.mqttClient.connect()
+		self.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE)
+		sleep(5)
+		
+		self.mqttClient.publishMessage(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE, str(data))
+		sleep(5)
+		
+		self.mqttClient.unsubscribeFromTopic(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE)
+		sleep(5)
+		
+		
+		self.mqttClient.disconnect()
+		sleep(5)
 		return True;
 	
 	def startManager(self):
 		logging.info("Start Manager "+str(self.startManager.__name__))
 		self.systemPerformanceManager.startManager();
 		self.sensorAdapterManager.startManager();
+		if(self.enableMqtt):
+			self.mqttClient.connectClient()
 		
 	def stopManager(self):
 		logging.info("Stop Manager "+str(self.stopManager.__name__))
 		self.systemPerformanceManager.stopManager();
 		self.sensorAdapterManager.stopManager();
+		if(self.enableMqtt):
+			self.mqttClient.disconnectClient()
+		
 
 	def _handleIncomingDataAnalysis(self, msg: str):
 		"""
