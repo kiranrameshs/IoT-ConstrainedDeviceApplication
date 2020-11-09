@@ -54,7 +54,6 @@ class DeviceDataManager(IDataMessageListener):
 	def handleIncomingMessage(self, resourceEnum: ResourceNameEnum, msg: str) -> bool:
 		logging.info("Handle Incoming Message");
 		actuatorDataInstance = DataUtil.jsonToActuatorData(msg);
-		#if(actuatorDataInstance.isResponseFlagEnabled()):
 		self._handleIncomingDataAnalysis(msg);
 		return True;
 
@@ -64,7 +63,7 @@ class DeviceDataManager(IDataMessageListener):
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE,self.toJSON)
 		self._handleSensorDataAnalysis(data);
 		
-		#self.mqttClient.connect()
+		self.mqttClient.connect()
 		self.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE)
 		sleep(5)
 		
@@ -75,8 +74,8 @@ class DeviceDataManager(IDataMessageListener):
 		sleep(5)
 		
 		
-		#self.mqttClient.disconnect()
-		#sleep(5)
+		self.mqttClient.disconnect()
+		sleep(5)
 		return True;
 		
 	def handleSystemPerformanceMessage(self, data: SystemPerformanceData) -> bool:
@@ -84,7 +83,7 @@ class DeviceDataManager(IDataMessageListener):
 		self.toJSON = DataUtil.sensorDataToJson(data);
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE,self.toJSON)
 		self._handleSensorDataAnalysis(data);
-		#self.mqttClient.connect()
+		self.mqttClient.connect()
 		self.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE)
 		sleep(5)
 		
@@ -95,8 +94,8 @@ class DeviceDataManager(IDataMessageListener):
 		sleep(5)
 		
 		
-		#self.mqttClient.disconnect()
-		#sleep(5)
+		self.mqttClient.disconnect()
+		sleep(5)
 		return True;
 	
 	def startManager(self):

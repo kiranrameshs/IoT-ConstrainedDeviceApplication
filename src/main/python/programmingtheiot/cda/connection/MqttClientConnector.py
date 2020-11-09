@@ -61,7 +61,7 @@ class MqttClientConnector(IPubSubClient):
 			self.mcc = self.mc.connect(self.host, self.port, self.keepAlive)
 			logging.info(str(self.mcc));
 			self.mc.loop_start()
-			logging.info('Broker connected successfully ')
+			logging.info('Connected to Broker  successfully ')
 		else:
 			logging.warn('MQTT client is already connected. Ignoring connect request.')
 			return False
@@ -95,7 +95,7 @@ class MqttClientConnector(IPubSubClient):
 			qos = self.DEFAULT_QOS
 		if self.mc.is_connected():
 			self.mc.publish(str(resource),msg,qos);
-			logging.info("Publish message succesful");
+			logging.info("Publish message successful");
 			return True
 		else:
 			return False
