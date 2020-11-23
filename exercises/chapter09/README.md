@@ -23,6 +23,24 @@ URL: https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh
 ![CDA](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter09/uml/lab9_CDA.png?raw=true)
 
  
+ ### Wireshark PCAP capture Snap(s)
+
+ #### - GET
+ ![GET](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-kiran-ramesh-s/blob/chapter09/pcap/coAP/CDA_Get.PNG?raw=true) 
+ #### - GETRESPONSE
+ ![GETRESPONSE](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-kiran-ramesh-s/blob/chapter09/pcap/coAP/CDA_Get_Response.PNG?raw=true) 
+ #### - POST
+ ![POST](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-kiran-ramesh-s/blob/chapter09/pcap/coAP/CDA_Post.PNG?raw=true) 
+ #### - POSTRESPONSE
+ ![POSTRESPONSE](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-kiran-ramesh-s/blob/chapter09/pcap/coAP/CDA_Post_Response.PNG?raw=true)  
+ #### - PUT
+ ![PUT](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-kiran-ramesh-s/blob/chapter09/pcap/coAP/CDA_Put.PNG?raw=true)  
+ #### - DELETE
+ ![DELETE](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-kiran-ramesh-s/blob/chapter09/pcap/coAP/CDA_Delete.PNG?raw=true)  
+ #### - FULLCAPTURE
+ ![FULLCAPTURE](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-kiran-ramesh-s/blob/chapter09/pcap/coAP/FullCaptureCDA.PNG?raw=true) 
+ 
+ 
 ### Unit Tests Executed
 
  - NA
