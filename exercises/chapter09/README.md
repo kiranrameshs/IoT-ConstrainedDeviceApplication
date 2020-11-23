@@ -1,49 +1,36 @@
 # Constrained Device Application (Connected Devices)
 
 ## Lab Module 09
-
-Be sure to implement all the PIOT-CDA-* issues (requirements) listed at [PIOT-INF-09-001 - Chapter 09](https://github.com/orgs/programming-the-iot/projects/1#column-10488503).
+  - Create coAP client
+  - Implement GET, PUT, POST, DELETE functionalities on CoapClientConnector
 
 ### Description
 
-NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
-
 What does your implementation do? 
+This implementation is for creating a coApClient on the CDA. The connector creates the url to the coAp server and has methods to generate get,put,post and delete methods.
+ 
 
 How does your implementation work?
+The client connector, when initialized creates the coAP server address and calls the initClient method which will create the coApClient object using the HelperClient class of coApPython3. Then methods are provided to generate get,put,post and delete methods. in these methods, we set the URI, call the methods and wait for the response and these responses are handed by the callback methods. To run the connector, we must first run the coApServer on the GDA and then run the client connector.
+
+
 
 ### Code Repository and Branch
 
-NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
-
-URL: 
+URL: https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/tree/chapter09
 
 ### UML Design Diagram(s)
+![CDA](https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-kiran-ramesh-s/blob/chapter09/uml/lab9_CDA.png?raw=true)
 
-NOTE: Include one or more UML designs representing your solution. It's expected each
-diagram you provide will look similar to, but not the same as, its counterpart in the
-book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
-
-
+ 
 ### Unit Tests Executed
 
-NOTE: TA's will execute your unit tests. You only need to list each test case below
-(e.g. ConfigUtilTest, DataUtilTest, etc). Be sure to include all previous tests, too,
-since you need to ensure you haven't introduced regressions.
-
-- 
-- 
-- 
+ - NA
 
 ### Integration Tests Executed
 
-NOTE: TA's will execute most of your integration tests using their own environment, with
-some exceptions (such as your cloud connectivity tests). In such cases, they'll review
-your code to ensure it's correct. As for the tests you execute, you only need to list each
-test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
+ -  ./src/test/python/programmingtheiot/part03/integration/connection/coAPClientConnectorTest
 
-- 
-- 
-- 
+
 
 EOF.
