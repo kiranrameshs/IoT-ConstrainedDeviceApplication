@@ -33,7 +33,7 @@ class CoapClientConnector(IRequestResponseClient):
 	
 	"""
 	
-	def _init_(self):
+	def __init__(self):
 		self.config = ConfigUtil.ConfigUtil()
 		self.dataMsgListener = None
 		self.coapClient = None
