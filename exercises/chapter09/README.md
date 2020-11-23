@@ -1,7 +1,7 @@
 # Constrained Device Application (Connected Devices)
 
 ## Lab Module 09
-  - Create coAP client!
+  - Create coAP client
   - Implement GET, PUT, POST, DELETE functionalities on CoapClientConnector
 
 ### Description
