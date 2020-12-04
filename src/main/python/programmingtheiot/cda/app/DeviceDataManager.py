@@ -36,7 +36,8 @@ class DeviceDataManager(IDataMessageListener):
 	def __init__(self, enableMqtt: bool = True, enableCoap: bool = False):
 		self.systemPerformanceManager = SystemPerformanceManager();
 		self.systemPerformanceManager.setDataMessageListener(self);
-		self.configUtil = ConfigUtil()	
+		self.configUtil = ConfigUtil()
+		self.dataUtil = DataUtil()	
 		self.mqttClient = MqttClientConnector();
 		self.enableMqtt = enableMqtt;
 		self.sensorAdapterManager = SensorAdapterManager();
@@ -53,49 +54,50 @@ class DeviceDataManager(IDataMessageListener):
 	
 	def handleIncomingMessage(self, resourceEnum: ResourceNameEnum, msg: str) -> bool:
 		logging.info("Handle Incoming Message");
-		actuatorDataInstance = DataUtil.jsonToActuatorData(msg);
+		actuatorDataInstance = self.dataUtil.jsonToActuatorData(msg);
 		self._handleIncomingDataAnalysis(msg);
 		return True;
 
 	def handleSensorMessage(self, data: SensorData) -> bool:
 		logging.info("Handle Sensor Message");
-		self.toJSON = DataUtil.sensorDataToJson(data);
+		logging.info("data is "+str(data.getSensorType()));
+		self.toJSON = self.dataUtil.sensorDataToJson(data);
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE,self.toJSON)
 		self._handleSensorDataAnalysis(data);
 		
-		self.mqttClient.connect()
-		self.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE)
-		sleep(5)
-		
-		self.mqttClient.publishMessage(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, str(data))
-		sleep(5)
-		
-		self.mqttClient.unsubscribeFromTopic(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE)
-		sleep(5)
-		
-		
-		self.mqttClient.disconnect()
-		sleep(5)
+# 		self.mqttClient.connect()
+# 		self.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE)
+# 		sleep(5)
+# 		
+# 		self.mqttClient.publishMessage(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, str(data))
+# 		sleep(5)
+# 		
+# 		self.mqttClient.unsubscribeFromTopic(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE)
+# 		sleep(5)
+# 		
+# 		
+# 		self.mqttClient.disconnect()
+# 		sleep(5)
 		return True;
 		
 	def handleSystemPerformanceMessage(self, data: SystemPerformanceData) -> bool:
 		logging.info("Handle System Performance Message");
-		self.toJSON = DataUtil.sensorDataToJson(data);
+		self.toJSON = self.dataUtil.sensorDataToJson(data);
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE,self.toJSON)
 		self._handleSensorDataAnalysis(data);
-		self.mqttClient.connect()
-		self.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE)
-		sleep(5)
-		
-		self.mqttClient.publishMessage(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE, str(data))
-		sleep(5)
-		
-		self.mqttClient.unsubscribeFromTopic(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE)
-		sleep(5)
-		
-		
-		self.mqttClient.disconnect()
-		sleep(5)
+# 		self.mqttClient.connect()
+# 		self.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE)
+# 		sleep(5)
+# 		
+# 		self.mqttClient.publishMessage(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE, str(data))
+# 		sleep(5)
+# 		
+# 		self.mqttClient.unsubscribeFromTopic(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE)
+# 		sleep(5)
+# 		
+# 		
+# 		self.mqttClient.disconnect()
+# 		sleep(5)
 		return True;
 	
 	def startManager(self):
@@ -118,11 +120,11 @@ class DeviceDataManager(IDataMessageListener):
 		Call this from handleIncomeMessage() to determine if there's
 		any action to take on the message. Steps to take:
 		1) Validate msg: Most will be ActuatorData, but you may pass other info as well.
-		2) Convert msg: Use DataUtil to convert if appropriate.
+		2) Convert msg: Use self.dataUtil to convert if appropriate.
 		3) Act on msg: Determine what - if any - action is required, and execute.
 		"""
 		logging.info("Handle Incoming DataAnalysis "+str(msg))
-		actuatorData = DataUtil.jsonToActuatorData(msg)
+		actuatorData = self.dataUtil.jsonToActuatorData(msg)
 		self.actuatorAdapterManager.sendActuatorCommand(actuatorData)
 		
 	def _handleSensorDataAnalysis(self, data: SensorData):
@@ -144,6 +146,31 @@ class DeviceDataManager(IDataMessageListener):
 		Call this from handleActuatorCommandResponse(), handlesensorMessage(), and handleSystemPerformanceMessage()
 		to determine if the message should be sent upstream. Steps to take:
 		1) Check connection: Is there a client connection configured (and valid) to a remote MQTT or CoAP server?
-		2) Act on msg: If # 1 is true, send message upstream using one (or both) client connections.
+		2) Act on msg: If  # 1 is true, send message upstream using one (or both) client connections.
 		"""
 		logging.info("Handle Upstream Transmission "+str(msg));
+# 		self.mqttClient.connect()
+# 		self.mqttClient.subscribeToTopic(resourceName)
+# 		sleep(5)
+		
+		self.mqttClient.publishMessage(resourceName, str(msg))
+# 		sleep(5)
+		
+# 		self.mqttClient.unsubscribeFromTopic(resourceName)
+# 		sleep(5)
+		
+		
+# 		self.mqttClient.disconnect()
+# 		sleep(5)
+		
+		
+	def handleActuatorCommandMessage(self, data: ActuatorData) -> bool:
+		if data:
+			logging.info("Processing actuator command message.")
+			
+			# TODO: add further validation before sending the command
+			self.actuatorAdapterManager.sendActuatorCommand(data)
+			return True
+		else:
+			logging.warning("Received invalid ActuatorData command message. Ignoring.")
+			return False

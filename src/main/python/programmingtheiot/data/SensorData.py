@@ -8,7 +8,7 @@
 #
 
 from programmingtheiot.data.BaseIotData import BaseIotData
-
+import programmingtheiot.common.ConfigConst as ConfigConst
 class SensorData(BaseIotData):
 	"""
 	Class with attributes, data and methods for Sensor data
@@ -23,11 +23,22 @@ class SensorData(BaseIotData):
 	PRESSURE_SENSOR_TYPE = 2
 	TEMP_SENSOR_TYPE = 3
 		
-	def __init__(self, sensorType = DEFAULT_SENSOR_TYPE, d = None):
-		super(SensorData, self).__init__(d = d)
-		self.sensorType = sensorType;
-		self.value = self.DEFAULT_VAL;
-		pass
+	def __init__(self, sensorType: int = DEFAULT_SENSOR_TYPE, name = ConfigConst.NOT_SET, d = None):
+		"""
+		Constructor.
+		
+		@param d Defaults to None. The data (dict) to use for setting all parameters.
+		It's provided here as a convenience - mostly for testing purposes. The utility
+		in DataUtil should be used instead.
+		"""
+		super(SensorData, self).__init__(name = name, d = d)
+		
+		if d:
+			self.value = d['value']
+			self.sensorType = d['sensorType']
+		else:
+			self.value = self.DEFAULT_VAL
+			self.sensorType = sensorType
 	
 	def getSensorType(self) -> int:
 		"""

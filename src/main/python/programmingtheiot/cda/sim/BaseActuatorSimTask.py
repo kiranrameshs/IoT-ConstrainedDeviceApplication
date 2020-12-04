@@ -11,6 +11,7 @@ import logging
 import random
 
 from programmingtheiot.data.ActuatorData import ActuatorData
+import programmingtheiot.common.ConfigConst as ConfigConst
 
 class BaseActuatorSimTask():
 	"""
@@ -19,10 +20,11 @@ class BaseActuatorSimTask():
 	"""
 	
 	
-	def __init__(self, actuatorType: int = ActuatorData.DEFAULT_ACTUATOR_TYPE, simpleName: str = "Actuator"):
+	def __init__(self, actuatorType: int = ActuatorData.DEFAULT_ACTUATOR_TYPE, simpleName: str = "Actuator", actuatorName = ConfigConst.NOT_SET):
 		self.actuatorType = actuatorType;
 		self.simpleName = simpleName;
-		self.actuatorData = ActuatorData();
+		self.actuatorData = ActuatorData(name = actuatorName);
+		
 		
 	def activateActuator(self, val: float) -> bool:
 		logging.info("ON command sent to actuator "+str(val))

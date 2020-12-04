@@ -15,8 +15,10 @@ from programmingtheiot.common import ConfigConst
 
 from programmingtheiot.common.IDataMessageListener import IDataMessageListener
 from programmingtheiot.common.ResourceNameEnum import ResourceNameEnum
+from programmingtheiot.data.DataUtil import DataUtil
 
 from programmingtheiot.cda.connection.IPubSubClient import IPubSubClient
+
 
 DEFAULT_QOS = 1
 
@@ -47,6 +49,7 @@ class MqttClientConnector(IPubSubClient):
 		logging.info('\tMQTT Keep Alive:  ' + str(self.keepAlive))
 		self.mc = mqttClient.Client(client_id = clientID, clean_session = True)
 		self.clientID = clientID;
+		self.dataMsgListener = None
 		
 	def connect(self) -> bool:
 		if not self.mc:
@@ -57,45 +60,57 @@ class MqttClientConnector(IPubSubClient):
 			self.mc.on_publish = self.onPublish
 			self.mc.on_subscribe = self.onSubscribe
 		if not self.mc.is_connected():
-			logging.info('Not connected to Broker, connecting now ')
-			self.mcc = self.mc.connect(self.host, self.port, self.keepAlive)
-			logging.info(str(self.mcc));
+# 			logging.info('Not connected to Broker, connecting now ')
+			self.mc.connect(self.host, self.port, self.keepAlive)
+# 			logging.info(str(self.mcc));
 			self.mc.loop_start()
-			logging.info('Connected to Broker  successfully ')
+# 			logging.info('Connected to Broker  successfully ')
+			return True
 		else:
-			logging.warn('MQTT client is already connected. Ignoring connect request.')
+# 			logging.warn('MQTT client is already connected. Ignoring connect request.')
 			return False
 		
 	def disconnect(self) -> bool:
 		if self.mc.is_connected():
 			self.mc.disconnect()
 			self.mc.loop_stop()
-			logging.info('Disconnected successfully ')
+			return True
+		return True
 		
 	def onConnect(self, client, userdata, flags, rc):
-		logging.info("On Connect")
+# 		logging.info("On Connect")
+		logging.info('[Callback] Connected to MQTT broker. Result code: ' + str(rc))
+
+		# NOTE: Use the QoS of your choice - '1' is only an example
+		self.mqttClient.subscribe(topic = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, qos = 1)
+		self.mqttClient.message_callback_add(sub = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, callback = self.onActuatorCommandMessage)
+# 		pass
 				
 	def onDisconnect(self, client, userdata, rc):
-		logging.info("On Disconnect")
+# 		logging.info("On Disconnect")
+		pass
 				
 	def onMessage(self, client, userdata, msg):
 		logging.info("On Message")
 					
 	def onPublish(self, client, userdata, mid):
-		logging.info("Publish "+str(mid));
+# 		logging.info("Publish "+str(mid));
+		pass
 			
 	def onSubscribe(self, client, userdata, mid, granted_qos):
 		logging.info("Subscribe "+str(mid));
 			
 	def publishMessage(self, resource: ResourceNameEnum, msg, qos: int = IPubSubClient.DEFAULT_QOS):
-		logging.info("Publish Message")
+# 		logging.info("Publish Message")
 		if(not ResourceNameEnum):
 			return False
 		if(qos<0 or qos>2):
 			qos = self.DEFAULT_QOS
 		if self.mc.is_connected():
 			self.mc.publish(str(resource),msg,qos);
-			logging.info("Publish message successful");
+# 			logging.info("Publish message successful");
+			msgInfo = self.mc.publish(topic = resource.value, payload = msg, qos = qos)
+			msgInfo.wait_for_publish()
 			return True
 		else:
 			return False
@@ -118,6 +133,20 @@ class MqttClientConnector(IPubSubClient):
 		logging.info("Unsubscribe succesful");
 		return False
 
+	
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
-		logging.info("Message listener");
+		if listener:
+			self.dataMsgListener = listener
+			return True
 		return False
+	
+	def onActuatorCommandMessage(self, client, userdata, msg):
+		logging.info('[Callback] Actuator command message received. Topic: %s.', msg.topic)
+		
+		if self.dataMsgListener:
+			try:
+				actuatorData = DataUtil().jsonToActuatorData(msg.payload)
+				
+				self.dataMsgListener.handleActuatorCommandMessage(actuatorData)
+			except:
+				logging.exception("Failed to convert incoming actuation command payload to ActuatorData: ")

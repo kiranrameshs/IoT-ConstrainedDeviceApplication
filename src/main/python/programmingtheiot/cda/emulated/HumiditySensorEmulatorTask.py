@@ -36,7 +36,7 @@ class HumiditySensorEmulatorTask(BaseSensorSimTask):
 	description : Use the respective SenseHat API to get the value 
 	'''
 	def generateTelemetry(self) -> SensorData:
-		sensorData = SensorData(sensorType = self.sensorType)
+		sensorData = SensorData(name = ConfigConst.HUMIDITY_SENSOR_NAME, sensorType = self.sensorType)
 		sensorVal = self.sh.environ.humidity
 		logging.info(sensorVal);		
 		sensorData.setValue(sensorVal)

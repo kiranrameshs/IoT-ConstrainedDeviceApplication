@@ -58,6 +58,7 @@ class ActuatorAdapterManager(object):
 			if(data.actuatorType == 1):
 				logging.info("Emulating HVAC Actuator "+str(data.getCommand())+" HVAC VALUE -> "+str(data.getValue()))
 				self.hvacEmulator.updateActuator(data);
+# 				self.ledEmulator.updateActuator(data);
 				return True;
 			elif(data.actuatorType == 2):
 				logging.info("Emulating HUMIDIFIER Actuator "+str(data.getCommand())+" HUMIDIFIER VALUE -> "+str(data.getValue()))

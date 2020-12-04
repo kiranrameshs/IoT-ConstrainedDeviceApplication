@@ -11,6 +11,7 @@ import logging
 import random
 
 from programmingtheiot.data.SensorData import SensorData
+import programmingtheiot.common.ConfigConst as ConfigConst
 
 class BaseSensorSimTask():
 	"""
@@ -27,11 +28,13 @@ class BaseSensorSimTask():
 	useRandomizer = True;
 	latestSensorData = None;
 
-	def __init__(self, sensorType: int = SensorData.DEFAULT_SENSOR_TYPE, dataSet = None, minVal: float = DEFAULT_MIN_VAL, maxVal: float = DEFAULT_MAX_VAL):
+	def __init__(self, sensorType: int = SensorData.DEFAULT_SENSOR_TYPE, dataSet = None, minVal: float = DEFAULT_MIN_VAL, maxVal: float = DEFAULT_MAX_VAL,
+				sensorName = ConfigConst.NOT_SET):
 		self.dataSet = dataSet;
 		self.sensorType = sensorType;
 		self.minVal = minVal
 		self.maxVal = maxVal
+		self.sensorName = sensorName
 	
 	'''
 	@param : none
@@ -39,7 +42,7 @@ class BaseSensorSimTask():
 	description : Initialize the SensorData class and Get random value for sensorData if random flag is enabled
 	'''
 	def generateTelemetry(self) -> SensorData:
-		sensorData = SensorData();
+		sensorData = SensorData(name = self.sensorName);
 		sensorData.sensorType = self.sensorType;
 		if(self.useRandomizer):
 			sensorData.setValue(random.uniform(self.minVal, self.maxVal))

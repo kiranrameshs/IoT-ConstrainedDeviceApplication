@@ -18,6 +18,8 @@ from programmingtheiot.cda.connection.MqttClientConnector import MqttClientConne
 from programmingtheiot.common.ConfigUtil import ConfigUtil
 from programmingtheiot.common.ResourceNameEnum import ResourceNameEnum
 from programmingtheiot.common.DefaultDataMessageListener import DefaultDataMessageListener
+from programmingtheiot.data.ActuatorData import ActuatorData
+from programmingtheiot.data.DataUtil import DataUtil
 
 class MqttClientConnectorTest(unittest.TestCase):
 	"""
@@ -95,6 +97,25 @@ class MqttClientConnectorTest(unittest.TestCase):
 		self.mcc.publishMessage(ResourceNameEnum.CDA_MGMT_STATUS_MSG_RESOURCE, "TEST: This is the CDA message payload.", qos)
 		
 		sleep(5)
+		
+		self.mcc.disconnect()
+		
+	def testActuatorCmdPubSub(self):
+		qos = 1
+
+		# NOTE: delay can be anything you'd like - the sleep() calls are simply to slow things down a bit for observation
+		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
+		
+		actuatorData = ActuatorData()
+		payload = DataUtil().actuatorDataToJson(actuatorData)
+		
+		self.mcc.connect()
+		
+		sleep(5)
+		
+		self.mcc.publishMessage(resource = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE, msg = payload, qos = qos)
+		
+		sleep(delay)
 		
 		self.mcc.disconnect()
 

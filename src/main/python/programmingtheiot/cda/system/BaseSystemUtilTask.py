@@ -9,14 +9,16 @@
 
 from programmingtheiot.data.SensorData import SensorData
 import logging
+import programmingtheiot.common.ConfigConst as ConfigConst
 class BaseSystemUtilTask():
 	"""
 	Shell representation of class for student implementation.
 	
 	"""
 	
-	def __init__(self):
+	def __init__(self, sensorName = ConfigConst.NOT_SET):
 		self.latestSensorData = None
+		self.sensorName = sensorName
 		
 		pass
 	
@@ -25,12 +27,12 @@ class BaseSystemUtilTask():
 		Get latest sensor data using getsystemUtil methpd from respective derived classes
 		@return: Latest Sensor Data
 		"""
-		self.latestSensorData = SensorData();
+		self.latestSensorData = SensorData(name = self.sensorName);
 		self.latestSensorData.setValue(self._getSystemUtil());
 		return self.latestSensorData;
 		
 	def getTelemetryValue(self) -> float:
-		if(self.latestSensorData.getValue()):
+		if(self.latestSensorData):
 			val = self.latestSensorData.getValue();
 		else:
 			sd = self.generateTelemetry();

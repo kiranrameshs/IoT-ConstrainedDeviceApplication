@@ -34,7 +34,7 @@ class TemperatureSensorEmulatorTask(BaseSensorSimTask):
 		self.sh = SenseHAT(emulate = enableEmulation)
 		
 	def generateTelemetry(self) -> SensorData:
-		sensorData = SensorData(sensorType = self.sensorType)
+		sensorData = SensorData(name = ConfigConst.TEMP_SENSOR_NAME, sensorType = self.sensorType)
 		sensorVal = self.sh.environ.temperature		
 		sensorData.setValue(sensorVal)
 		self.latestSensorData = sensorData

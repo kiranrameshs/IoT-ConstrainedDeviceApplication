@@ -99,9 +99,9 @@ class CoapClientConnector(IRequestResponseClient):
 			logging.warning("Can't test GET - no path or path list provided.")
 
 	def sendPostRequest(self, resource: ResourceNameEnum, payload: str, enableCON=False, timeout: int = IRequestResponseClient.DEFAULT_TIMEOUT) -> bool:
-		logging.info("PostRequest")
+# 		logging.info("PostRequest")
 		if resource:
-			logging.debug("Issuing POST with path: " + resource.value)
+# 			logging.debug("Issuing POST with path: " + resource.value)
 			request = self.coapClient.mk_request(defines.Codes.POST, path = resource.value)
 			request.token = generate_random_token(2)
 			request.payload = payload
@@ -111,12 +111,13 @@ class CoapClientConnector(IRequestResponseClient):
 				
 			self.coapClient.send_request(request = request, callback = self._onPostResponse, timeout = timeout)
 		else:
-			logging.warning("Can't test POST - no path or path list provided.")
+# 			logging.warning("Can't test POST - no path or path list provided.")
+			pass
 
 	def sendPutRequest(self, resource: ResourceNameEnum, payload: str, enableCON = False, timeout: int = IRequestResponseClient.DEFAULT_TIMEOUT) -> bool:
-		logging.info("PutRequest")
+# 		logging.info("PutRequest")
 		if resource:
-			logging.debug("Issuing PUT with path: " + resource.value)
+# 			logging.debug("Issuing PUT with path: " + resource.value)
 			request = self.coapClient.mk_request(defines.Codes.PUT, path = resource.value)
 			request.token = generate_random_token(2)
 			request.payload = payload
@@ -126,7 +127,8 @@ class CoapClientConnector(IRequestResponseClient):
 				
 			self.coapClient.send_request(request = request, callback = self._onPutResponse, timeout = timeout)
 		else:
-			logging.warning("Can't test PUT - no path or path list provided.")
+# 			logging.warning("Can't test PUT - no path or path list provided.")
+			pass
 
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
 		self.dataMsgListener = listener
@@ -177,20 +179,22 @@ class CoapClientConnector(IRequestResponseClient):
 				self.dataMsgListener.handleIncomingMessage(resource, str(response.payload))
 			
 	def _onPutResponse(self,response):
-		logging.info('PUT response received.')
+# 		logging.info('PUT response received.')
 
 		if response:
-			logging.info('Token: ' + str(response.token))
-			logging.info(str(response.location_path))
-			logging.info(str(response.payload))
+# 			logging.info('Token: ' + str(response.token))
+# 			logging.info(str(response.location_path))
+# 			logging.info(str(response.payload))
+			pass
 	
 	def _onPostResponse(self,response):
-		logging.info('POST response received.')
+# 		logging.info('POST response received.')
 
 		if response:
-			logging.info('Token: ' + str(response.token))
-			logging.info(str(response.location_path))
-			logging.info(str(response.payload))
+# 			logging.info('Token: ' + str(response.token))
+# 			logging.info(str(response.location_path))
+# 			logging.info(str(response.payload))
+			pass
 			
 	def _onDeleteResponse(self,response):
 		logging.info('DELETE response received.')
@@ -203,3 +207,8 @@ class CoapClientConnector(IRequestResponseClient):
 	def _initClient(self):
 		if not self.coapClient:
 			self.coapClient = HelperClient(server = (self.host, self.port))
+			
+	def disconnectClient(self):
+		if(self.coapClient):
+			self.coapClient = None
+			

@@ -26,8 +26,8 @@ class DataUtil():
 		jsonData = json.dumps(actuatorData, indent = 4, cls = JsonDataEncoder, ensure_ascii = True)
 		return jsonData
 	
-	def sensorDataToJson(self, sensorData):
-		jsonData = json.dumps(sensorData, indent = 4, cls = JsonDataEncoder, ensure_ascii = True)
+	def sensorDataToJson(self, data):
+		jsonData = json.dumps(data, indent = 4, cls = JsonDataEncoder, ensure_ascii = True)
 		return jsonData
 
 	def systemPerformanceDataToJson(self, sysPerfData):

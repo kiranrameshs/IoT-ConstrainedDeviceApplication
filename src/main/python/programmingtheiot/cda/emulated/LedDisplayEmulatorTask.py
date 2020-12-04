@@ -23,7 +23,8 @@ class LedDisplayEmulatorTask(BaseActuatorSimTask):
 	
 	"""
 	def __init__(self):
-		super(LedDisplayEmulatorTask, self).__init__(actuatorType = ActuatorData.LED_DISPLAY_ACTUATOR_TYPE, simpleName = "LED_Display")
+		super(LedDisplayEmulatorTask, self).__init__(actuatorType = ActuatorData.LED_DISPLAY_ACTUATOR_TYPE, simpleName = "LED_Display",
+													actuatorName = ConfigConst.LED_ACTUATOR_NAME)
 		self.configUtil = ConfigUtil()
 		senseHatKey = self.configUtil.getBoolean(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.ENABLE_SENSE_HAT_KEY);
 		if(senseHatKey):
