@@ -8,7 +8,7 @@
 #
 
 from programmingtheiot.data.BaseIotData import BaseIotData
-
+import programmingtheiot.common.ConfigConst as ConfigConst
 class SystemPerformanceData(BaseIotData):
 	"""
 	Class with attributes, data and methods for SysPerf data
@@ -20,9 +20,23 @@ class SystemPerformanceData(BaseIotData):
 	diskUtil = 0.0;
 	
 	def __init__(self, d = None):
-		super(SystemPerformanceData, self).__init__(d = d)
+		"""
+		Constructor.
 		
-		pass
+		@param d Defaults to None. The data (dict) to use for setting all parameters.
+		It's provided here as a convenience - mostly for testing purposes. The utility
+		in DataUtil should be used instead.
+		"""
+		super(SystemPerformanceData, self).__init__(name = ConfigConst.SYS_PERF_DATA, d = d)
+		
+		if d:
+			self.cpuUtil = d['cpuUtil']
+			self.diskUtil = d['diskUtil']
+			self.memUtil = d['memUtil']
+		else:
+			self.cpuUtil = self.DEFAULT_VAL
+			self.diskUtil = self.DEFAULT_VAL
+			self.memUtil = self.DEFAULT_VAL
 	
 	def getCpuUtilization(self):
 		return self.cpuUtil;

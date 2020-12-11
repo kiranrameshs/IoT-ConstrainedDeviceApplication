@@ -14,7 +14,7 @@ from programmingtheiot.cda.sim.SensorDataGenerator import SensorDataGenerator,\
 	SensorDataSet
 
 from programmingtheiot.data.SensorData import SensorData
-
+import programmingtheiot.common.ConfigConst as ConfigConst
 class HumiditySensorSimTask(BaseSensorSimTask):
 	"""
 	Shell representation of class for student implementation.
@@ -22,13 +22,15 @@ class HumiditySensorSimTask(BaseSensorSimTask):
 	"""
 	
 	def __init__(self, dataSet: SensorDataSet=None):
-		super(HumiditySensorSimTask, self).__init__(SensorData.HUMIDITY_SENSOR_TYPE, dataSet = dataSet, minVal = SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY, maxVal = SensorDataGenerator.HI_NORMAL_ENV_HUMIDITY)
+		super(HumiditySensorSimTask, self).__init__(SensorData.HUMIDITY_SENSOR_TYPE, dataSet = dataSet, minVal = SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY, maxVal = SensorDataGenerator.HI_NORMAL_ENV_HUMIDITY,
+												sensorName = ConfigConst.HUMIDITY_SENSOR_NAME)
 	
 	"""
 	return the value from generateTelemetry() from parent class
 	"""
 	def generateTelemetry(self) -> SensorData:
-		return super(HumiditySensorSimTask, self).generateTelemetry()
+# 		return super(HumiditySensorSimTask, self).generateTelemetry()
+		sensorData = SensorData(name = ConfigConst.HUMIDITY_SENSOR_NAME, sensorType = self.sensorType)
 	
 	def getTelemetryValue(self) -> float:
 		return super(HumiditySensorSimTask, self).getTelemetryValue()

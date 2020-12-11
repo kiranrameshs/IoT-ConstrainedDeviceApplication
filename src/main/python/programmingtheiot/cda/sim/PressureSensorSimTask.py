@@ -14,7 +14,7 @@ from programmingtheiot.cda.sim.SensorDataGenerator import SensorDataGenerator,\
 	SensorDataSet
 
 from programmingtheiot.data.SensorData import SensorData
-
+import programmingtheiot.common.ConfigConst as ConfigConst
 class PressureSensorSimTask(BaseSensorSimTask):
 	"""
 	Shell representation of class for student implementation.
@@ -23,10 +23,12 @@ class PressureSensorSimTask(BaseSensorSimTask):
 	
 
 	def __init__(self, dataSet: SensorDataSet=None):
-		super(PressureSensorSimTask, self).__init__(SensorData.PRESSURE_SENSOR_TYPE, dataSet = dataSet, minVal = SensorDataGenerator.LOW_NORMAL_ENV_PRESSURE, maxVal = SensorDataGenerator.HI_NORMAL_ENV_PRESSURE)
+		super(PressureSensorSimTask, self).__init__(SensorData.PRESSURE_SENSOR_TYPE, dataSet = dataSet, minVal = SensorDataGenerator.LOW_NORMAL_ENV_PRESSURE, maxVal = SensorDataGenerator.HI_NORMAL_ENV_PRESSURE,
+												sensorName = ConfigConst.PRESSURE_SENSOR_NAME)
 	
 	def generateTelemetry(self) -> SensorData:
-		return super(PressureSensorSimTask, self).generateTelemetry()
+# 		return super(PressureSensorSimTask, self).generateTelemetry()
+		sensorData = SensorData(name = ConfigConst.PRESSURE_SENSOR_NAME, sensorType = self.sensorType)
 	
 	def getTelemetryValue(self) -> float:
 		return super(PressureSensorSimTask, self).getTelemetryValue()

@@ -26,7 +26,7 @@ class BaseIotData(object):
 	STATUS_IDLE = DEFAULT_STATUS
 	STATUS_ACTIVE = 1
 
-	def __init__(self, d = None):
+	def __init__(self, name = ConfigConst.NOT_SET, d = None):
 		"""
 		Constructor.
 		
@@ -41,7 +41,7 @@ class BaseIotData(object):
 			self.statusCode = d['statusCode']
 		else:
 			self.updateTimeStamp()
-			self.name = ConfigConst.NOT_SET
+			self.name = name
 			self.hasError = False
 			self.statusCode = self.DEFAULT_STATUS
 	

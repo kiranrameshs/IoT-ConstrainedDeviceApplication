@@ -14,6 +14,7 @@ from programmingtheiot.cda.sim.SensorDataGenerator import SensorDataGenerator,\
 	SensorDataSet
 
 from programmingtheiot.data.SensorData import SensorData
+import programmingtheiot.common.ConfigConst as ConfigConst
 
 class TemperatureSensorSimTask(BaseSensorSimTask):
 	"""
@@ -23,10 +24,12 @@ class TemperatureSensorSimTask(BaseSensorSimTask):
 	
 
 	def __init__(self, dataSet: SensorDataSet=None):
-		super(TemperatureSensorSimTask, self).__init__(SensorData.TEMP_SENSOR_TYPE, dataSet = dataSet, minVal = SensorDataGenerator.LOW_NORMAL_INDOOR_TEMP, maxVal = SensorDataGenerator.HI_NORMAL_INDOOR_TEMP)
+		super(TemperatureSensorSimTask, self).__init__(SensorData.TEMP_SENSOR_TYPE, dataSet = dataSet, minVal = SensorDataGenerator.LOW_NORMAL_INDOOR_TEMP, maxVal = SensorDataGenerator.HI_NORMAL_INDOOR_TEMP,
+													sensorName = ConfigConst.TEMP_SENSOR_NAME)
 	
 	def generateTelemetry(self) -> SensorData:
-		return super(TemperatureSensorSimTask, self).generateTelemetry()
+# 		return super(TemperatureSensorSimTask, self).generateTelemetry()
+		sensorData = SensorData(name = ConfigConst.TEMP_SENSOR_NAME, sensorType = self.sensorType)
 	
 	def getTelemetryValue(self) -> float:
 		return super(TemperatureSensorSimTask, self).getTelemetryValue()

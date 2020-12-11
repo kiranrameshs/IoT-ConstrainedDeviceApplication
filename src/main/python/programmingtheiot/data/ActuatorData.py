@@ -8,7 +8,7 @@
 #
 
 from programmingtheiot.data.BaseIotData import BaseIotData
-
+import programmingtheiot.common.ConfigConst as ConfigConst
 class ActuatorData(BaseIotData):
 	"""
 	Class with attributes, data and methods for Actuator data
@@ -26,16 +26,39 @@ class ActuatorData(BaseIotData):
 	HUMIDIFIER_ACTUATOR_TYPE = 2
 	LED_DISPLAY_ACTUATOR_TYPE = 100
 
-	def __init__(self, actuatorType = DEFAULT_ACTUATOR_TYPE, d = None):
-		super(ActuatorData, self).__init__(d = d)
-		self.actuatorType  = actuatorType;
-		self.command = self.DEFAULT_COMMAND;
-		self.value = 0;
-		self.stateData = None;
+	def __init__(self, actuatorType: int = DEFAULT_ACTUATOR_TYPE, name = ConfigConst.NOT_SET, d = None):
+		"""
+		Constructor.
+		
+		@param d Defaults to None. The data (dict) to use for setting all parameters.
+		It's provided here as a convenience - mostly for testing purposes. The utility
+		in DataUtil should be used instead.
+		"""
+		super(ActuatorData, self).__init__(name = name, d = d)
+		
+		self.isResponse = False
+		self.actuatorType = actuatorType
+		
+		if d:
+			self.command = d['command']
+			self.stateData = d['stateData']
+			self.curValue = d['curValue']
+			self.actuatorType = d['actuatorType']
+		else:
+			self.command = self.DEFAULT_COMMAND
+			self.stateData = None
+			self.curValue = self.DEFAULT_VAL
+			self.actuatorType = actuatorType
 		
 	
 	def getCommand(self) -> int:
 		return self.command;
+	
+	def getActuatorType(self) -> int:
+		return self.actuatorType;
+	
+	def setActuatorType(self, actuatorType: int):
+		self.actuatorType = actuatorType;
 	
 	def getStateData(self) -> str:
 		return self.stateData;
