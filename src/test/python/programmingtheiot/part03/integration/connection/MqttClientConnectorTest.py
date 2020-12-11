@@ -56,7 +56,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 
 	#@unittest.skip("Ignore for now.")
 	def testConnectAndPublish(self):
-		qos = 2
+		qos = 1
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
 		listener = DefaultDataMessageListener()
 		

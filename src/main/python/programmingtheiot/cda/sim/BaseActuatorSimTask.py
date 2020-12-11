@@ -23,19 +23,36 @@ class BaseActuatorSimTask():
 	def __init__(self, actuatorType: int = ActuatorData.DEFAULT_ACTUATOR_TYPE, simpleName: str = "Actuator", actuatorName = ConfigConst.NOT_SET):
 		self.actuatorType = actuatorType;
 		self.simpleName = simpleName;
-		self.actuatorData = ActuatorData(name = actuatorName);
+		logging.info(" actuatorName is "+str(actuatorName))
+		self.latestActuatorData= ActuatorData(name=actuatorName);
 		
-		
+	'''
+	@param : value
+	output : N/A
+	description : Activate the actuator
+	'''		
 	def activateActuator(self, val: float) -> bool:
 		logging.info("ON command sent to actuator "+str(val))
-		self.actuatorData.setCommand(ActuatorData.COMMAND_ON);
+		self.latestActuatorData.setCommand(ActuatorData.COMMAND_ON)
+		return True
 		
+	'''
+	@param : value
+	output : bool
+	description : deactivate the actuator
+	'''		
 	def deactivateActuator(self) -> bool:
 		logging.info("OFF command sent to actuator ")
-		self.actuatorData.setCommand(ActuatorData.COMMAND_OFF);
-		
+		self.latestActuatorData.setCommand(ActuatorData.COMMAND_OFF)
+		return True
+	
+	'''
+	@param : N/A
+	output : ActuatorData
+	description : get the response
+	'''			
 	def getLatestActuatorResponse(self) -> ActuatorData:
-		return self.actuatorData;
+		return self.latestActuatorData
 	
 	def getSimpleName(self) -> str:
 		return self.simpleName;
@@ -47,9 +64,9 @@ class BaseActuatorSimTask():
 	def updateActuator(self, data: ActuatorData) -> bool:
 		if(data):
 			self._handleActuation(data.getCommand(),data.getValue(),data.getStateData());
-			self.actuatorData = data;
-			self.actuatorData.setStatusCode(data.getStatusCode());
-			self.actuatorData.setAsResponse();
+			self.latestActuatorData = data
+			self.latestActuatorData.setStatusCode(data.getStatusCode())
+			self.latestActuatorData.setAsResponse()	
 			return True
 		else:
 			return False;

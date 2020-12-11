@@ -32,8 +32,8 @@ class TemperatureSensorSimTaskTest(unittest.TestCase):
 
 	def tearDown(self):
 		pass
-
-	@unittest.skip("Ignore for now.")
+	
+	#@unittest.skip("Ignore for now.")
 	def testGenerateTelemetry(self):
 		sd = self.tSimTask.generateTelemetry()
 		

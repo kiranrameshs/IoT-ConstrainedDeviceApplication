@@ -15,10 +15,10 @@ from programmingtheiot.common import ConfigConst
 
 from programmingtheiot.common.IDataMessageListener import IDataMessageListener
 from programmingtheiot.common.ResourceNameEnum import ResourceNameEnum
-from programmingtheiot.data.DataUtil import DataUtil
 
 from programmingtheiot.cda.connection.IPubSubClient import IPubSubClient
 
+from programmingtheiot.data.DataUtil import DataUtil
 
 DEFAULT_QOS = 1
 
@@ -27,7 +27,8 @@ class MqttClientConnector(IPubSubClient):
 	Shell representation of class for student implementation.
 	
 	"""
-
+	mc = None
+	clientID = None
 	def __init__(self, clientID: str = None):
 		"""
 		Default constructor. This will set remote broker information and client connection
@@ -40,6 +41,8 @@ class MqttClientConnector(IPubSubClient):
 		the same clientID continuously attempts to re-connect, causing the broker to
 		disconnect the previous instance.
 		"""
+		self.dataMsgListener = None
+		self.clientID = clientID
 		self.config = ConfigUtil.ConfigUtil()
 		self.host = self.config.getProperty(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.HOST_KEY, ConfigConst.DEFAULT_HOST)
 		self.port = self.config.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.PORT_KEY, ConfigConst.DEFAULT_MQTT_PORT)
@@ -47,11 +50,12 @@ class MqttClientConnector(IPubSubClient):
 		logging.info('\tMQTT Broker Host: ' + self.host)
 		logging.info('\tMQTT Broker Port: ' + str(self.port))
 		logging.info('\tMQTT Keep Alive:  ' + str(self.keepAlive))
-		self.mc = mqttClient.Client(client_id = clientID, clean_session = True)
-		self.clientID = clientID;
-		self.dataMsgListener = None
-		
-	def connect(self) -> bool:
+
+	"""
+	connects to client and returns true
+	
+	"""
+	def connectClient(self) -> bool:
 		if not self.mc:
 			self.mc = mqttClient.Client(client_id = self.clientID, clean_session = True)
 			self.mc.on_connect = self.onConnect
@@ -60,92 +64,94 @@ class MqttClientConnector(IPubSubClient):
 			self.mc.on_publish = self.onPublish
 			self.mc.on_subscribe = self.onSubscribe
 		if not self.mc.is_connected():
-# 			logging.info('Not connected to Broker, connecting now ')
 			self.mc.connect(self.host, self.port, self.keepAlive)
-# 			logging.info(str(self.mcc));
 			self.mc.loop_start()
-# 			logging.info('Connected to Broker  successfully ')
 			return True
 		else:
-# 			logging.warn('MQTT client is already connected. Ignoring connect request.')
+			logging.warn('MQTT client is already connected. Ignoring connect request.')
 			return False
-		
-	def disconnect(self) -> bool:
+	"""
+	Disconnects from client 
+	
+	"""
+	def disconnectClient(self) -> bool:
 		if self.mc.is_connected():
 			self.mc.disconnect()
 			self.mc.loop_stop()
-			return True
 		return True
-		
+	
+	"""
+	call back methods to implement functionalities after connect disconnect, on message received etc
+	
+	"""
 	def onConnect(self, client, userdata, flags, rc):
-# 		logging.info("On Connect")
+		logging.info('client has successfully connected')
 		logging.info('[Callback] Connected to MQTT broker. Result code: ' + str(rc))
-
-		# NOTE: Use the QoS of your choice - '1' is only an example
-		self.mqttClient.subscribe(topic = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, qos = 1)
-		self.mqttClient.message_callback_add(sub = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, callback = self.onActuatorCommandMessage)
-# 		pass
-				
-	def onDisconnect(self, client, userdata, rc):
-# 		logging.info("On Disconnect")
-		pass
-				
-	def onMessage(self, client, userdata, msg):
-		logging.info("On Message")
-					
-	def onPublish(self, client, userdata, mid):
-# 		logging.info("Publish "+str(mid));
-		pass
-			
-	def onSubscribe(self, client, userdata, mid, granted_qos):
-		logging.info("Subscribe "+str(mid));
-			
-	def publishMessage(self, resource: ResourceNameEnum, msg, qos: int = IPubSubClient.DEFAULT_QOS):
-# 		logging.info("Publish Message")
-		if(not ResourceNameEnum):
-			return False
-		if(qos<0 or qos>2):
-			qos = self.DEFAULT_QOS
-		if self.mc.is_connected():
-			self.mc.publish(str(resource),msg,qos);
-# 			logging.info("Publish message successful");
-			msgInfo = self.mc.publish(topic = resource.value, payload = msg, qos = qos)
-			msgInfo.wait_for_publish()
-			return True
-		else:
-			return False
+		self.mc.subscribe(topic = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, qos = 1)
+		self.mc.subscribe(topic = ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE.value, qos=1)
+		self.mc.message_callback_add(sub = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, callback = self.onActuatorCommandMessage)
+		self.mc.message_callback_add(sub = ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE.value, callback = self.onActuatorCommandMessage)
 		
+	def onDisconnect(self, client, userdata, rc):
+		logging.info('client has successfully disconnected')
+		
+	def onMessage(self, client, userdata, msg):
+		logging.info('onMessage has been called')
+			
+	def onPublish(self, client, userdata, mid):
+		pass
+# 		logging.info('onPublish has been called with message id : ' + str(mid))
+	
+	def onSubscribe(self, client, userdata, mid, granted_qos):
+		logging.info('onSubscribe has been called with message id : ' + str(mid))
+	
+	"""
+	publishes message to client after validation and returns true
+	
+	"""
+	def publishMessage(self, resource: ResourceNameEnum, msg, qos: int = IPubSubClient.DEFAULT_QOS):
+# 		logging.info('publishMessage has been called')
+		if not resource:
+			return False
+		if qos < 0 or qos > 2:
+			qos = IPubSubClient.DEFAULT_QOS
+# 		logging.info('Message received is : ' + msg)
+		msgInfo  = self.mc.publish(resource.value, msg, qos)
+		msgInfo.wait_for_publish()
+		return True
+	"""
+	subscribes to topic and returns true
+	
+	"""
 	def subscribeToTopic(self, resource: ResourceNameEnum, qos: int = IPubSubClient.DEFAULT_QOS):
-		logging.info("Subscribe Topic")
-		if(not ResourceNameEnum):
+		logging.info('subscribeToTopic has been called')
+		if not resource:
 			return False
-		if(qos<0 or qos>2):
-			qos = self.DEFAULT_QOS
-		if self.mc.is_connected():
-			self.mc.subscribe(str(resource),qos);
-			logging.info("Subscribe Topic successful");
-			return True
-		else:
-			return False
+		if qos < 0 or qos > 2:
+			qos = IPubSubClient.DEFAULT_QOS
+		self.mc.subscribe(resource.name, qos)
+		return True
 	
+	"""
+	Unsubscribes from topic
+	
+	"""
 	def unsubscribeFromTopic(self, resource: ResourceNameEnum):
-		self.mc.unsubscribe(str(resource));
-		logging.info("Unsubscribe succesful");
-		return False
+		self.mc.unsubscribe(resource.name, None)
 
-	
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
 		if listener:
 			self.dataMsgListener = listener
 			return True
 		return False
-	
+
 	def onActuatorCommandMessage(self, client, userdata, msg):
 		logging.info('[Callback] Actuator command message received. Topic: %s.', msg.topic)
-		
+		logging.info('outside dataMsgListener')
 		if self.dataMsgListener:
+			logging.info('inside dataMsgListener')
 			try:
-				actuatorData = DataUtil().jsonToActuatorData(msg.payload)
+				actuatorData = DataUtil().jsonToActuatorData(msg.payload.decode('utf-8'))
 				
 				self.dataMsgListener.handleActuatorCommandMessage(actuatorData)
 			except:

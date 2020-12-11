@@ -29,6 +29,7 @@ class PressureSensorSimTask(BaseSensorSimTask):
 	def generateTelemetry(self) -> SensorData:
 # 		return super(PressureSensorSimTask, self).generateTelemetry()
 		sensorData = SensorData(name = ConfigConst.PRESSURE_SENSOR_NAME, sensorType = self.sensorType)
+		return super(PressureSensorSimTask, self).generateTelemetry(sensorData)
 	
 	def getTelemetryValue(self) -> float:
 		return super(PressureSensorSimTask, self).getTelemetryValue()

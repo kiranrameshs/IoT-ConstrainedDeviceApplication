@@ -22,7 +22,7 @@ from programmingtheiot.common.DefaultDataMessageListener import DefaultDataMessa
 from programmingtheiot.data.SensorData import SensorData
 from programmingtheiot.data.DataUtil import DataUtil
 
-class MqttClientConnectorPerformanceTest(unittest.TestCase):
+class MqttClientPerformanceTest(unittest.TestCase):
     """
     This test case class contains very basic unit tests for
     MqttClientConnector. It should not be considered complete,

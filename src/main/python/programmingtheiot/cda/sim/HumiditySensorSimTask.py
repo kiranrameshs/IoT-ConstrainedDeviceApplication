@@ -20,18 +20,20 @@ class HumiditySensorSimTask(BaseSensorSimTask):
 	Shell representation of class for student implementation.
 	
 	"""
-	
-	def __init__(self, dataSet: SensorDataSet=None):
-		super(HumiditySensorSimTask, self).__init__(SensorData.HUMIDITY_SENSOR_TYPE, dataSet = dataSet, minVal = SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY, maxVal = SensorDataGenerator.HI_NORMAL_ENV_HUMIDITY,
-												sensorName = ConfigConst.HUMIDITY_SENSOR_NAME)
+
+	def __init__(self,dataset: SensorDataSet=None):
+		super(HumiditySensorSimTask, self).__init__(SensorData.HUMIDITY_SENSOR_TYPE, dataSet = dataset, minVal = SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY, maxVal = SensorDataGenerator.HI_NORMAL_ENV_HUMIDITY,sensorName = ConfigConst.HUMIDITY_SENSOR_NAME)
 	
 	"""
 	return the value from generateTelemetry() from parent class
 	"""
 	def generateTelemetry(self) -> SensorData:
-# 		return super(HumiditySensorSimTask, self).generateTelemetry()
 		sensorData = SensorData(name = ConfigConst.HUMIDITY_SENSOR_NAME, sensorType = self.sensorType)
-	
+		return super(HumiditySensorSimTask, self).generateTelemetry(sensorData)
+		
+	"""
+	return the telemetry value
+	"""	
 	def getTelemetryValue(self) -> float:
 		return super(HumiditySensorSimTask, self).getTelemetryValue()
 	

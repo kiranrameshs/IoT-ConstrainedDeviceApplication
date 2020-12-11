@@ -18,28 +18,28 @@ from programmingtheiot.cda.sim.HvacActuatorSimTask import HvacActuatorSimTask
 class ActuatorAdapterManager(object):
 	"""
 	Shell representation of class for student implementation.
+	load the Humidifier actuation emulator
+	load the HVac actuation emulator
+	load the LED actuation emulator
+	initialize the actuators
 	"""
 	def __init__(self, useEmulator: bool = True):
 		self.dataMessageListener = None;
 		self.useEmulator = useEmulator;
 		if(self.useEmulator):
 			logging.info("Using Emulators")
-			# load the Humidifier actuation emulator
 			humidifierModule = __import__('programmingtheiot.cda.emulated.HumidifierEmulatorTask', fromlist = ['HumidifierEmulatorTask'])
 			hueClazz = getattr(humidifierModule, 'HumidifierEmulatorTask')
 			self.humidifierEmulator = hueClazz()
-			# load the HVac actuation emulator
 			hvacModule = __import__('programmingtheiot.cda.emulated.HvacEmulatorTask', fromlist = ['HvacEmulatorTask'])
 			hvacClazz = getattr(hvacModule, 'HvacEmulatorTask')
 			self.hvacEmulator = hvacClazz()
-			# load the LED actuation emulator
 			LEDModule = __import__('programmingtheiot.cda.emulated.LedDisplayEmulatorTask', fromlist = ['LedDisplayEmulatorTask'])
 			ledClazz = getattr(LEDModule, 'LedDisplayEmulatorTask')
 			self.ledEmulator = ledClazz()
 		else:
 			logging.info("Using Simulators")
-			#initialize the actuators
-			self.humidifierActautor = HumidifierActuatorSimTask()
+			self.humidifierActuator = HumidifierActuatorSimTask()
 			self.hvacActuator = HvacActuatorSimTask()
 
 	def sendActuatorCommand(self, data: ActuatorData) -> bool:
@@ -50,15 +50,14 @@ class ActuatorAdapterManager(object):
 				return True;
 			elif(data.actuatorType == 2):
 				logging.info("Simulating HUMIDIFIER Actuator "+str(data.getCommand())+" HUMIDIFIER VALUE -> "+str(data.getValue()))
-				self.humidifierActautor.updateActuator(data);	
+				self.humidifierActuator.updateActuator(data)
 				return True
 			else:
-				False
+				return False
 		else:
 			if(data.actuatorType == 1):
 				logging.info("Emulating HVAC Actuator "+str(data.getCommand())+" HVAC VALUE -> "+str(data.getValue()))
 				self.hvacEmulator.updateActuator(data);
-# 				self.ledEmulator.updateActuator(data);
 				return True;
 			elif(data.actuatorType == 2):
 				logging.info("Emulating HUMIDIFIER Actuator "+str(data.getCommand())+" HUMIDIFIER VALUE -> "+str(data.getValue()))

@@ -36,6 +36,11 @@ class HvacEmulatorTask(BaseActuatorSimTask):
 			enableEmulation = True;
 		self.sh = SenseHAT(emulate = enableEmulation)
 
+	'''
+	@param : Actuator Data
+	output : boolean
+	description : Call the super class udpate method
+	'''	
 	def updateActuator(self, data: ActuatorData) -> bool:
 		return super(HvacEmulatorTask, self).updateActuator(data);
 	
