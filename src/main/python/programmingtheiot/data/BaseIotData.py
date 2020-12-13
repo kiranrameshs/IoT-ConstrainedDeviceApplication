@@ -34,12 +34,14 @@ class BaseIotData(object):
 		It's provided here as a convenience - mostly for testing purposes. The utility
 		in DataUtil should be used instead.
 		"""
+# 		print("name in baseiotdata is "+str(name))
 		if d:
 			self.name = d['name']
 			self.timeStamp = d['timeStamp']
 			self.hasError = d['hasError']
 			self.statusCode = d['statusCode']
 		else:
+# 			print(" else part name is "+str(name))
 			self.updateTimeStamp()
 			self.name = name
 			self.hasError = False
@@ -127,10 +129,10 @@ class BaseIotData(object):
 		@return The string representing this instance.
 		"""
 		customStr = \
-            str('name='    + self.name + \
-            ',timeStamp=' + self.timeStamp + \
-            ',hasError=' + str(self.hasError) + \
-            ',statusCode=' + str(self.statusCode))
+			str('name='	+ str(self.name) + \
+			',timeStamp=' + str(self.timeStamp) + \
+			',hasError=' + str(self.hasError) + \
+			',statusCode=' + str(self.statusCode))
 					
 		return customStr
 	

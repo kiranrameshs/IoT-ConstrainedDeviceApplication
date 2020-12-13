@@ -11,7 +11,7 @@ import logging
 import unittest
 
 from time import sleep
-
+import programmingtheiot.common.ConfigConst as ConfigConst
 from programmingtheiot.data.ActuatorData import ActuatorData
 from programmingtheiot.cda.emulated.HumidifierEmulatorTask import HumidifierEmulatorTask
 
@@ -46,7 +46,7 @@ class HumidifierEmulatorTaskTest(unittest.TestCase):
 		pass
 
 	def testUpdateEmulator(self):
-		ad = ActuatorData(actuatorType = ActuatorData.HUMIDIFIER_ACTUATOR_TYPE)
+		ad = ActuatorData(actuatorType = ActuatorData.HUMIDIFIER_ACTUATOR_TYPE, name=ConfigConst.HUMIDIFIER_ACTUATOR_NAME)
 		ad.setCommand(ActuatorData.COMMAND_ON)
 		ad.setValue(50.0)
 		

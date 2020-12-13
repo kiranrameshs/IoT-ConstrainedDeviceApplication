@@ -34,6 +34,7 @@ class ActuatorData(BaseIotData):
 		It's provided here as a convenience - mostly for testing purposes. The utility
 		in DataUtil should be used instead.
 		"""
+# 		print("name is "+str(name))
 		super(ActuatorData, self).__init__(name = name, d = d)
 		
 		self.isResponse = False
@@ -49,7 +50,6 @@ class ActuatorData(BaseIotData):
 			self.stateData = None
 			self.curValue = self.DEFAULT_VAL
 			self.actuatorType = actuatorType
-		
 	
 	def getCommand(self) -> int:
 		return self.command;
@@ -64,7 +64,7 @@ class ActuatorData(BaseIotData):
 		return self.stateData;
 	
 	def getValue(self) -> float:
-		return self.value
+		return self.curValue
 	
 	def isResponseFlagEnabled(self) -> bool:
 		return False
@@ -79,11 +79,11 @@ class ActuatorData(BaseIotData):
 		self.stateData = stateData;
 	
 	def setValue(self, val: float):
-		self.value = val;
+		self.curValue = val;
 		
 	def _handleUpdateData(self, data):
 		self.command = data.getCommand();
-		self.value = data.getValue();
+		self.curValue = data.getValue();
 		self.stateData = data.getStateData();
 		
 		

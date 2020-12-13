@@ -20,17 +20,15 @@ class HvacActuatorSimTask(BaseActuatorSimTask):
 	"""
 
 	def __init__(self):
-		super(HvacActuatorSimTask, self).__init__(actuatorType = ActuatorData.HVAC_ACTUATOR_TYPE, simpleName = "HVAC",
-												actuatorName = ConfigConst.HVAC_ACTUATOR_NAME)
+		super(HvacActuatorSimTask, self).__init__(actuatorType = ActuatorData.HVAC_ACTUATOR_TYPE, simpleName = "HVAC", actuatorName = ConfigConst.HVAC_ACTUATOR_NAME)
 		
-# 	def activateActuator(self, val: float) -> bool:
-# 		super(HvacActuatorSimTask, self).activateActuator(val);
-# 		return True
-# 		
-# 	def deactivateActuator(self) -> bool:
-# 		super(HvacActuatorSimTask, self).deactivateActuator();
-# 		return True
-# 		
-# 	def updateActuator(self, data: ActuatorData) -> ActuatorData:
-# 		return super(HvacActuatorSimTask, self).updateActuator(data);
-		
+	def activateActuator(self, val: float) -> bool:
+		super(HvacActuatorSimTask, self).activateActuator(val)
+		return True
+ 		
+	def deactivateActuator(self) -> bool:
+		super(HvacActuatorSimTask, self).deactivateActuator()
+		return True
+ 	
+	def updateActuator(self, data: ActuatorData) -> ActuatorData:
+		return super(HvacActuatorSimTask, self).updateActuator(data)

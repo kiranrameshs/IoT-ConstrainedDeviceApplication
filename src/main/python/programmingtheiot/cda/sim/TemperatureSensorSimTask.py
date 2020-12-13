@@ -28,8 +28,8 @@ class TemperatureSensorSimTask(BaseSensorSimTask):
 													sensorName = ConfigConst.TEMP_SENSOR_NAME)
 	
 	def generateTelemetry(self) -> SensorData:
-# 		return super(TemperatureSensorSimTask, self).generateTelemetry()
 		sensorData = SensorData(name = ConfigConst.TEMP_SENSOR_NAME, sensorType = self.sensorType)
+		return super(TemperatureSensorSimTask, self).generateTelemetry(sensorData)
 	
 	def getTelemetryValue(self) -> float:
 		return super(TemperatureSensorSimTask, self).getTelemetryValue()

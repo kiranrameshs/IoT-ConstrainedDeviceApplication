@@ -27,7 +27,8 @@ class BaseSystemUtilTask():
 		Get latest sensor data using getsystemUtil methpd from respective derived classes
 		@return: Latest Sensor Data
 		"""
-		self.latestSensorData = SensorData(name = self.sensorName);
+		sensorData = SensorData(name = self.sensorName);
+		self.latestSensorData = sensorData
 		self.latestSensorData.setValue(self._getSystemUtil());
 		return self.latestSensorData;
 		
