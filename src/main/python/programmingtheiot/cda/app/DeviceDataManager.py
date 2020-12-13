@@ -82,6 +82,8 @@ class DeviceDataManager(IDataMessageListener):
 		logging.info("Processing handleActuatorCommandMessage")
 		if data:
 			logging.info("Processing actuator command message.")
+			
+			# TODO: add further validation before sending the command
 			self.actuatorAdapterManager.sendActuatorCommand(data)
 			return True
 		else:
@@ -180,6 +182,8 @@ class DeviceDataManager(IDataMessageListener):
 		if self.enableMqtt is True:
 			logging.debug("_handleUpstreamTransmission mqttClient  publishMessage has been called")
 			logging.debug(resourceName.name)
+# 			self.mqttClient.subscribeToTopic(resourceName, 1);
+# 			logging.debug("subscribed to : "+ resourceName)
 			self.mqttClient.publishMessage(resourceName, msg, 1)
 		if self.enableCoap is True:
 			logging.debug("_handleUpstreamTransmission coapClient  sendPostRequest has been called")

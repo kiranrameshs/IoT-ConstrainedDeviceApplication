@@ -43,7 +43,7 @@ class HumidifierActuatorSimTask(BaseActuatorSimTask):
 		super(HumidifierActuatorSimTask, self).deactivateActuator()
 		return True
  		
- 	'''
+	'''
 	@param : none
 	output : SensorData
 	description : Update the actuator

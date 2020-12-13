@@ -92,16 +92,27 @@ class MqttClientConnector(IPubSubClient):
 		self.mc.message_callback_add(sub = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, callback = self.onActuatorCommandMessage)
 		self.mc.message_callback_add(sub = ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE.value, callback = self.onActuatorCommandMessage)
 		
+	"""
+	method called when mqtt is disconnected.
+	
+	"""
 	def onDisconnect(self, client, userdata, rc):
 		logging.info('client has successfully disconnected')
 		
 	def onMessage(self, client, userdata, msg):
 		logging.info('onMessage has been called')
-			
-	def onPublish(self, client, userdata, mid):
-		pass
-# 		logging.info('onPublish has been called with message id : ' + str(mid))
 	
+	"""
+	method called when a message is published.
+	
+	"""		
+	def onPublish(self, client, userdata, mid):
+		logging.info('onPublish has been called with message id : ' + str(mid))
+	
+	"""
+	method called when the client subscribes to a topic.
+	
+	"""
 	def onSubscribe(self, client, userdata, mid, granted_qos):
 		logging.info('onSubscribe has been called with message id : ' + str(mid))
 	
@@ -110,12 +121,12 @@ class MqttClientConnector(IPubSubClient):
 	
 	"""
 	def publishMessage(self, resource: ResourceNameEnum, msg, qos: int = IPubSubClient.DEFAULT_QOS):
-# 		logging.info('publishMessage has been called')
+		logging.info('publishMessage has been called')
 		if not resource:
 			return False
 		if qos < 0 or qos > 2:
 			qos = IPubSubClient.DEFAULT_QOS
-# 		logging.info('Message received is : ' + msg)
+		logging.info('Message received is : ' + msg)
 		msgInfo  = self.mc.publish(resource.value, msg, qos)
 		msgInfo.wait_for_publish()
 		return True
@@ -139,12 +150,20 @@ class MqttClientConnector(IPubSubClient):
 	def unsubscribeFromTopic(self, resource: ResourceNameEnum):
 		self.mc.unsubscribe(resource.name, None)
 
+	"""
+	Setter for the data message listener
+	
+	"""
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
 		if listener:
 			self.dataMsgListener = listener
 			return True
 		return False
 
+	"""
+	Callback method called for Actuator command
+	
+	"""
 	def onActuatorCommandMessage(self, client, userdata, msg):
 		logging.info('[Callback] Actuator command message received. Topic: %s.', msg.topic)
 		logging.info('outside dataMsgListener')
