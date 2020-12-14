@@ -24,6 +24,7 @@ class ActuatorData(BaseIotData):
 	
 	HVAC_ACTUATOR_TYPE = 1
 	HUMIDIFIER_ACTUATOR_TYPE = 2
+	CAMERA_ACTUATOR_TYPE = 3
 	LED_DISPLAY_ACTUATOR_TYPE = 100
 
 	def __init__(self, actuatorType: int = DEFAULT_ACTUATOR_TYPE, name = ConfigConst.NOT_SET, d = None):

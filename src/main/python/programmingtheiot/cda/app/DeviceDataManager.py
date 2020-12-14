@@ -121,6 +121,7 @@ class DeviceDataManager(IDataMessageListener):
 		self.sensorAdapterManager.startManager()
 		if self.enableMqtt is True:
 			self.mqttClient.connectClient()
+			self.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_DISPLAY_CMD_MSG_RESOURCE, 1)
 		
 	def stopManager(self):
 		"""
