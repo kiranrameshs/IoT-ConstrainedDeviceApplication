@@ -26,7 +26,7 @@ class SensorAdapterManager(object):
 	"""
 	Initialize the data based on Emulators/simulators
 	"""
-	def __init__(self, useEmulator: bool = True, pollRate: int = 5, allowConfigOverride: bool = True):
+	def __init__(self, useEmulator: bool = True, pollRate: int = 20, allowConfigOverride: bool = True):
 		self.dataMessageListener = None;
 		self.useEmulator = useEmulator;
 		self.pollRate = pollRate;
@@ -34,15 +34,12 @@ class SensorAdapterManager(object):
 		self.scheduler.add_job(self.handleTelemetry, 'interval', seconds = self.pollRate)
 		if(self.useEmulator):
 			logging.info("Using Emulators")
-			# load the Humidity emulator
 			humidityModule = __import__('programmingtheiot.cda.emulated.HumiditySensorEmulatorTask', fromlist = ['HumiditySensorEmulatorTask'])
 			heClazz = getattr(humidityModule, 'HumiditySensorEmulatorTask')
 			self.humidityEmulator = heClazz()
-			# load the Temperature emulator
 			tempModule = __import__('programmingtheiot.cda.emulated.TemperatureSensorEmulatorTask', fromlist = ['TemperatureSensorEmulatorTask'])
 			tempClazz = getattr(tempModule, 'TemperatureSensorEmulatorTask')
 			self.tempEmulator = tempClazz()
-			# load the Pressure emulator
 			pressureModule = __import__('programmingtheiot.cda.emulated.PressureSensorEmulatorTask', fromlist = ['PressureSensorEmulatorTask'])
 			pClazz = getattr(pressureModule, 'PressureSensorEmulatorTask')
 			self.pressureEmulator = pClazz()
@@ -50,25 +47,21 @@ class SensorAdapterManager(object):
 			logging.info("Using Simulators")
 			self.dataGenerator = SensorDataGenerator()
 			configUtil = ConfigUtil()
-			#Find floor and ceiling values for each of the types
 			humidityFloor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HUMIDITY_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY)
 			humidityCeiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HUMIDITY_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_ENV_HUMIDITY)
 			pressureFloor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.PRESSURE_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_ENV_PRESSURE)
 			pressureCeiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.PRESSURE_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_ENV_PRESSURE)
 			temperatureFloor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TEMP_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_INDOOR_TEMP)
 			temperatureCeiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TEMP_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_INDOOR_TEMP)
-			#Generate data for each of the types using floor as min values and ceiling as max values
 			humidityData = self.dataGenerator.generateDailyEnvironmentHumidityDataSet(minValue = humidityFloor, maxValue = humidityCeiling, useSeconds = False);
 			pressureData = self.dataGenerator.generateDailyEnvironmentPressureDataSet(minValue = pressureFloor, maxValue = pressureCeiling, useSeconds = False);
 			temperatureData = self.dataGenerator.generateDailyIndoorTemperatureDataSet(minValue = temperatureFloor, maxValue = temperatureCeiling, useSeconds = False);
-			#Use the data as dataset for sensor sim tasks
 			self.humiditySenorSimTask = HumiditySensorSimTask(dataSet=humidityData);
 			self.pressureSenorSimTask = PressureSensorSimTask(dataSet=pressureData);
 			self.temperatureSenorSimTask = TemperatureSensorSimTask(dataSet=temperatureData);
 			
 	def handleTelemetry(self):
 		if(self.useEmulator == True):
-			#Use emulator
 			humiditySensorData = self.humidityEmulator.generateTelemetry()
 			pressureSensorData = self.pressureEmulator.generateTelemetry()
 			temperatureSensorData =  self.tempEmulator.generateTelemetry()
@@ -76,7 +69,6 @@ class SensorAdapterManager(object):
 			self.dataMessageListener.handleSensorMessage(pressureSensorData)
 			self.dataMessageListener.handleSensorMessage(temperatureSensorData)
 		else:
-			#Use simulator
 			humiditySensorData = self.humiditySenorSimTask.generateTelemetry()
 			pressureSensorData = self.pressureSenorSimTask.generateTelemetry()
 			temperatureSensorData =  self.temperatureSenorSimTask.generateTelemetry()

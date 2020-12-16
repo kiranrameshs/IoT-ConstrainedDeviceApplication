@@ -209,29 +209,22 @@ class SensorDataGenerator(object):
 		@return SensorDataSet The sensor data set containing both time entries and data
 		values for those time entries.
 		"""
-		# validate noise level - ensure it's between 1 and 100
 		if noiseLevel < self.NO_NOISE: noiseLevel = self.NO_NOISE
 		if noiseLevel > self.MAX_NOISE: noiseLevel = self.MAX_NOISE
 		
-		# validate min and max values
 		if maxValue < minValue: maxValue = minValue
 		if minValue > maxValue: minValue = maxValue
 		
-		# validate start and end hours
 		if startHour < self.MIN_HOURS or minValue > self.MAX_HOURS: startHour = self.MIN_HOURS
 		if endHour < 0 or endHour > self.MAX_HOURS: endHour = self.MAX_HOURS
 		
-		# calc total data points to be generated
 		totalDataPoints = (endHour - startHour) * 60
 		
 		if useSeconds: totalDataPoints = totalDataPoints * 60
 		if totalDataPoints == 0: totalDataPoints = 1
 		
-		# create evenly spaced number of 'totalDataPoints' between 'startHour' and 'endHour'
 		timeEntries = calcLib.linspace(start = startHour, stop = endHour, num = totalDataPoints)
 		
-		# generate the distribution data for each point - quick ramp up curve
-		# followed by a more gradual ramp down
 		if self.alignGeneratorToDay:
 			if curveType > 0:
 				denominator = (curveType + self.dayDenominator)
@@ -251,24 +244,18 @@ class SensorDataGenerator(object):
 				
 			dataValuesClean = calcLib.sin(timeEntries / denominator)
 		
-		# re-scale array with 'minValue' as floor and 'maxValue' as ceiling
 		scaledValuesClean = calcLib.interp(dataValuesClean, (dataValuesClean.min(), dataValuesClean.max()), (minValue, maxValue))
 		dataSet = SensorDataSet(epochOffsetSeconds = self.epochOffsetSeconds, useCurrentTime = self.useCurrentTime, timeEntries = timeEntries)
 		
-		# check if noise should be added
 		if noiseLevel != self.NO_NOISE:
-			# get the mean value, generate base10 log and calculate noise numerator
 			meanValue = calcLib.mean(scaledValuesClean)
 			
-			# calc order of magnitude of mean value - this is necessary to ensure
-			# the generated noisyness aligns with the magnitude of the values
 			meanMag = int(math.log10(meanValue))
 			noiseScale = ((noiseLevel / 100) * ((10 ** meanMag) / 10))
 			noisyTemp = calcLib.random.normal(0, noiseScale, len(scaledValuesClean))
 			
 			logging.debug("Noise=%f; Noise Scale=%f; Mean Magnitude=%f" % (noiseLevel, noiseScale, meanMag))
 			
-			# update the data set to add in noise with clean values
 			scaledValuesNoisy = (scaledValuesClean + noisyTemp)
 			
 			dataSet.setDataEntries(scaledValuesNoisy)
@@ -417,7 +404,6 @@ class SensorDataSet():
 		(evenly spaced from start to end) that should correspond to dataEntries - element by element.
 		"""
 		if not timeEntries is None:
-			# data generator uses a single dimension array, so it's safe to flatten
 			self.timeEntries = timeEntries.flatten()
 			logging.info("timeEntries tuple. Array Size: %s  ND Size: %s  Dimensions: %s  Shape: %s  Type: %s", self.timeEntries.size, timeEntries.size, timeEntries.ndim, timeEntries.shape, timeEntries.dtype)
 		
@@ -429,7 +415,6 @@ class SensorDataSet():
 		that should correspond to timeEntries - element by element.
 		"""
 		if not dataEntries is None:
-			# data generator uses a single dimension array, so it's safe to flatten
 			self.dataEntries = dataEntries.flatten()
 			logging.info("dataEntries tuple. Array Size: %s  ND Size: %s  Dimensions: %s  Shape: %s  Type: %s", self.dataEntries.size, dataEntries.size, dataEntries.ndim, dataEntries.shape, dataEntries.dtype)
 		
@@ -442,21 +427,17 @@ def main():
 	
 	sensorDataGeneratorEpoch = SensorDataGenerator(useCurrentTime = False, alignGeneratorToDay = True)
 	
-	# run generic example - 1 second samples over 24 hours - start time will be this system's Epoch
 	sensorDataSet = sensorDataGeneratorEpoch.generateDailySensorDataSet(noiseLevel = 10, startHour = 0, endHour = 24, minValue = 10, maxValue = 20, useSeconds = True)
 	sensorDataGeneratorEpoch.generateOnScreenGraph(dataSet = sensorDataSet)
 	
 	sensorDataGenerator = SensorDataGenerator(alignGeneratorToDay = True)
 	
-	# run indoor temp example - 1 minute samples over 24 hours - start time will be this system's current time
 	sensorDataSet = sensorDataGenerator.generateDailyIndoorTemperatureDataSet(noiseLevel = 15, minValue = SensorDataGenerator.LOW_NORMAL_INDOOR_TEMP, maxValue = SensorDataGenerator.HI_NORMAL_INDOOR_TEMP)
 	sensorDataGenerator.generateOnScreenGraph(chartTitle = "Indoor Temp", chartYLabel = "Time", chartXLabel = "Temp (C)", dataSet = sensorDataSet)
 	
-	# run humidity example - 1 minute samples over 24 hours - start time will be this system's current time
 	sensorDataSet = sensorDataGenerator.generateDailyEnvironmentHumidityDataSet(noiseLevel = 10, minValue = SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY, maxValue = SensorDataGenerator.HI_NORMAL_ENV_HUMIDITY)
 	sensorDataGenerator.generateOnScreenGraph(chartTitle = "Humidity", chartYLabel = "Time", chartXLabel = "%", dataSet = sensorDataSet)
 	
-	# run pressure example - 1 minute samples over 24 hours - start time will be this system's current time
 	sensorDataSet = sensorDataGenerator.generateDailyEnvironmentPressureDataSet(noiseLevel = 1, minValue = SensorDataGenerator.LOW_NORMAL_ENV_PRESSURE, maxValue = SensorDataGenerator.HI_NORMAL_ENV_PRESSURE)
 	sensorDataGenerator.generateOnScreenGraph(chartTitle = "Pressure", chartXLabel = "Time", chartYLabel = "Millibars", dataSet = sensorDataSet)
 	
