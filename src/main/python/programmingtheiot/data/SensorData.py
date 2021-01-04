@@ -22,6 +22,7 @@ class SensorData(BaseIotData):
 	HUMIDITY_SENSOR_TYPE = 1
 	PRESSURE_SENSOR_TYPE = 2
 	TEMP_SENSOR_TYPE = 3
+	CAMERA_SENSOR_TYPE = 4
 		
 	def __init__(self, sensorType: int = DEFAULT_SENSOR_TYPE, name = ConfigConst.NOT_SET, d = None):
 		"""

@@ -73,7 +73,7 @@ class DeviceDataManager(IDataMessageListener):
 		"""
 		Handles json response converts json data to Actuator object and returns if its successful
 		"""
-		logging.info("handleIncomingMessage method has been called")
+		logging.info("handle Incoming Message method")
 		actuatorData = DataUtil.jsonToActuatorData(msg)
 		self._handleIncomingDataAnalysis(msg)
 		return True
@@ -82,8 +82,7 @@ class DeviceDataManager(IDataMessageListener):
 		logging.info("Processing handleActuatorCommandMessage")
 		if data:
 			logging.info("Processing actuator command message.")
-			
-			# TODO: add further validation before sending the command
+			logging.info(data);
 			self.actuatorAdapterManager.sendActuatorCommand(data)
 			return True
 		else:
@@ -150,7 +149,7 @@ class DeviceDataManager(IDataMessageListener):
 		2) Convert msg: Use DataUtil to convert if appropriate.
 		3) Act on msg: Determine what - if any - action is required, and execute.
 		"""
-		logging.debug("_handleIncomingDataAnalysis method has been called")
+		logging.debug("_handle Incoming DataAnalysis")
 		if self._is_json(msg):
 			actuatorData = DataUtil.jsonToActuatorData(self, msg)
 			self.actuatorAdapterManager.sendActuatorCommand(actuatorData)
@@ -183,8 +182,6 @@ class DeviceDataManager(IDataMessageListener):
 		if self.enableMqtt is True:
 			logging.debug("_handleUpstreamTransmission mqttClient  publishMessage has been called")
 			logging.debug(resourceName.name)
-# 			self.mqttClient.subscribeToTopic(resourceName, 1);
-# 			logging.debug("subscribed to : "+ resourceName)
 			self.mqttClient.publishMessage(resourceName, msg, 1)
 		if self.enableCoap is True:
 			logging.debug("_handleUpstreamTransmission coapClient  sendPostRequest has been called")

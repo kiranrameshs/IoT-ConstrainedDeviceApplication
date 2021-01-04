@@ -92,6 +92,7 @@ class MqttClientConnector(IPubSubClient):
 		self.mc.message_callback_add(sub = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, callback = self.onActuatorCommandMessage)
 		self.mc.subscribe(topic = ResourceNameEnum.CDA_DISPLAY_CMD_MSG_RESOURCE.value,qos =  1)
 		self.mc.message_callback_add(sub = ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE.value, callback = self.onActuatorCommandMessage)
+		self.mc.message_callback_add(sub = ResourceNameEnum.CDA_DISPLAY_CMD_MSG_RESOURCE.value, callback = self.onActuatorCommandMessage)
 		
 	"""
 	method called when mqtt is disconnected.

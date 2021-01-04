@@ -42,9 +42,6 @@ class BaseSensorSimTask():
 	description : Initialize the SensorData class and Get random value for sensorData if random flag is enabled
 	'''
 	def generateTelemetry(self,sensorData:SensorData) -> SensorData:
-#		sensorData = SensorData(name = self.sensorName);
-#         sensorData.sensorType = self.sensorType;sensorData = SensorData(name = self.sensorName);
-# 		sensorData.sensorType = self.sensorType
 		if(self.useRandomizer):
 			sensorData.setValue(random.uniform(self.minVal, self.maxVal))
 		else:
